@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Matryoshka</string>
+
+    <string name="menu_refresh">Refresh</string>
+
+    <string name="activity_main_title">Android Apps</string>
 </resources>
