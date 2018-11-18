@@ -1,0 +1,11 @@
+Brand Colors:
+
+Main:       #6075E0
+Shadow:     #576490
+Highlight:  #89AAE6
+Dark:       #232C33
+Light:      #DADFF7
+
+Brand Font:
+
+Raleway     https://fonts.google.com/specimen/Raleway
