@@ -18,11 +18,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Space;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -138,6 +141,14 @@ public class DrawerActivity extends AppCompatActivity
                         androidAppName.setTextSize(30);
                         androidAppName.setTextColor(getResources().getColor(R.color.colorPrimary));
                         cardLayout.addView(androidAppName);
+
+                        // Image
+                        if(app.getAvatar() != null && app.getAvatar() != "empty") {
+                            String baseUrl = "https://matryoshkadoll.me/storage/";
+                            ImageView androidAppAvatar = new ImageView(DrawerActivity.this);
+                            Picasso.get().load(baseUrl + app.getAvatar()).resize(150, 150).into(androidAppAvatar);
+                            cardLayout.addView(androidAppAvatar);
+                        }
 
                         // Description
                         TextView androidAppDescription = new TextView(DrawerActivity.this);
