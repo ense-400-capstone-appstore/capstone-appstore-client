@@ -1,6 +1,7 @@
 package me.matryoshkadoll.app.ui;
 
 import android.app.ActionBar;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -32,6 +33,7 @@ import java.util.List;
 import me.matryoshkadoll.app.R;
 import me.matryoshkadoll.app.api.model.AndroidApp;
 import me.matryoshkadoll.app.api.service.matryoshka.AndroidAppsClient;
+import me.matryoshkadoll.app.login.LoginActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -246,7 +248,9 @@ public class DrawerActivity extends AppCompatActivity
         if (id == R.id.nav_camera) {
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
+            Intent intent = new Intent(this, LoginActivity.class);
 
+            startActivity(intent);
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
