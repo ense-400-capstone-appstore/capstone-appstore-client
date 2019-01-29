@@ -1,17 +1,39 @@
 package me.matryoshkadoll.app.api.model;
 
+
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 public class User {
-    private String email;
-    private String token;
 
+    @SerializedName("success")
+    @Expose
+    private Success success;
 
-    public String getEmail() {
-        return email;
+    public Success getSuccess() {
+        return success;
+    }
+
+    public void setSuccess(Success success) {
+        this.success = success;
     }
 
 
-    public String getToken() {
-        return token;
-    }
+    public class Success {
 
+        @SerializedName("token")
+        @Expose
+        private String token;
+
+        public String getToken() {
+            return token;
+        }
+
+        public void setToken(String token) {
+            this.token = token;
+        }
+
+    }
 }
+
+
