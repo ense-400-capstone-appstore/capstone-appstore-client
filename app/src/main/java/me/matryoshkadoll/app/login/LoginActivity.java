@@ -33,6 +33,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.matryoshkadoll.app.R;
+import me.matryoshkadoll.app.api.model.AndroidApp;
+import me.matryoshkadoll.app.api.service.matryoshka.AndroidAppsClient;
+import me.matryoshkadoll.app.network.RetrofitClientInstance;
+import retrofit2.Call;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -311,6 +315,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // TODO: attempt authentication against a network service.
 
             try {
+                AndroidAppsClient client = RetrofitClientInstance.getRetrofitInstance().create(AndroidAppsClient.class);
+
+                Call<List<AndroidApp>> call = client.androidApps();
                 // Simulate network access.
                 Thread.sleep(2000);
             } catch (InterruptedException e) {

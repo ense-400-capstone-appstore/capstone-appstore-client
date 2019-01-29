@@ -34,6 +34,7 @@ import me.matryoshkadoll.app.R;
 import me.matryoshkadoll.app.api.model.AndroidApp;
 import me.matryoshkadoll.app.api.service.matryoshka.AndroidAppsClient;
 import me.matryoshkadoll.app.login.LoginActivity;
+import me.matryoshkadoll.app.network.RetrofitClientInstance;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -92,11 +93,8 @@ public class DrawerActivity extends AppCompatActivity
         LinearLayout appsList = findViewById(R.id.android_apps_list);
 
         // HTTP API connection setup
-        Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl("https://matryoshkadoll.me/api/v1/")
-                .addConverterFactory(GsonConverterFactory.create());
-        Retrofit retrofit = builder.build();
-        AndroidAppsClient client = retrofit.create(AndroidAppsClient.class);
+        AndroidAppsClient client = RetrofitClientInstance.getRetrofitInstance().create(AndroidAppsClient.class);
+
         Call<List<AndroidApp>> call = client.androidApps();
 
         // Notify user that fetch is in progress
