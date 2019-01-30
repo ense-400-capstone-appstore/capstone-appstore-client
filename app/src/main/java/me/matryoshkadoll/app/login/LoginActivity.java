@@ -41,6 +41,7 @@ import java.util.List;
 import me.matryoshkadoll.app.R;
 import me.matryoshkadoll.app.api.model.AndroidApp;
 import me.matryoshkadoll.app.api.model.User;
+import me.matryoshkadoll.app.api.model.UserInfo;
 import me.matryoshkadoll.app.api.service.matryoshka.AndroidAppsClient;
 import me.matryoshkadoll.app.network.RetrofitClientInstance;
 import me.matryoshkadoll.app.ui.DrawerActivity;
@@ -328,22 +329,18 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
                 AndroidAppsClient client = RetrofitClientInstance.getRetrofitInstance().create(AndroidAppsClient.class);
             //convert email&password to json
-                JSONObject paramObject = new JSONObject();
-            try{
+            UserInfo uif = new UserInfo();
+            uif.setemail(mEmail);
+            uif.setpassword(mPassword);
 
-
-                paramObject.put("email", mEmail);
-            paramObject.put("password", mPassword);
-            }
-            catch(JSONException e){}
-                Call<User> call = client.UserLogin(paramObject.toString());
+                Call<User> call = client.UserLogin(uif);
 
                 call.enqueue( new Callback<User>() {
                     @Override
                     public void onResponse(Call<User> call, Response<User> response) {
 
                         Log.i("Status", "Status code " + response.code());
-                        Log.i("AndroidLogin", "login " + response.body());
+                        Log.i("AndroidLogin", "login response " + response.body());
                         User user = response.body();
                         if(user != null) {
                             startActivity(new Intent(LoginActivity.this, DrawerActivity.class));
