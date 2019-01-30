@@ -32,6 +32,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -322,10 +325,18 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // TODO: attempt authentication against a network service.
 
 
-                //String[] pieces = credential.split(":");
-                AndroidAppsClient client = RetrofitClientInstance.getRetrofitInstance().create(AndroidAppsClient.class);
 
-                Call<User> call = client.UserLogin(mEmail,mPassword);
+                AndroidAppsClient client = RetrofitClientInstance.getRetrofitInstance().create(AndroidAppsClient.class);
+            //convert email&password to json
+                JSONObject paramObject = new JSONObject();
+            try{
+
+
+                paramObject.put("email", mEmail);
+            paramObject.put("password", mPassword);
+            }
+            catch(JSONException e){}
+                Call<User> call = client.UserLogin(paramObject.toString());
 
                 call.enqueue( new Callback<User>() {
                     @Override
