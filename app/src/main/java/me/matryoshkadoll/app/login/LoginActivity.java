@@ -3,6 +3,7 @@ package me.matryoshkadoll.app.login;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -19,6 +20,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -28,15 +30,20 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import me.matryoshkadoll.app.R;
 import me.matryoshkadoll.app.api.model.AndroidApp;
+import me.matryoshkadoll.app.api.model.User;
 import me.matryoshkadoll.app.api.service.matryoshka.AndroidAppsClient;
 import me.matryoshkadoll.app.network.RetrofitClientInstance;
+import me.matryoshkadoll.app.ui.DrawerActivity;
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -314,23 +321,42 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
 
-            try {
+
+                //String[] pieces = credential.split(":");
                 AndroidAppsClient client = RetrofitClientInstance.getRetrofitInstance().create(AndroidAppsClient.class);
 
-                Call<List<AndroidApp>> call = client.androidApps();
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
+                Call<User> call = client.UserLogin(mEmail,mPassword);
 
-            for (String credential : DUMMY_CREDENTIALS) {
+                call.enqueue( new Callback<User>() {
+                    @Override
+                    public void onResponse(Call<User> call, Response<User> response) {
+
+                        Log.i("Status", "Status code " + response.code());
+                        Log.i("AndroidLogin", "login " + response.body());
+                        User user = response.body();
+                        if(user != null) {
+                            startActivity(new Intent(LoginActivity.this, DrawerActivity.class));
+
+                            //finish();
+                        }else {
+                            Toast.makeText(LoginActivity.this, "" + response.body(), Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+                    @Override
+                    public void onFailure(Call<User> call, Throwable t) {
+                        Toast.makeText(LoginActivity.this, "Error Login!", Toast.LENGTH_SHORT).show();
+
+                    }
+            } );
+
+            /*for (String credential : DUMMY_CREDENTIALS) {
                 String[] pieces = credential.split(":");
                 if (pieces[0].equals(mEmail)) {
                     // Account exists, return true if the password matches.
                     return pieces[1].equals(mPassword);
                 }
-            }
+            }*/
 
             // TODO: register the new account here.
             return true;
