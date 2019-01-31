@@ -1,4 +1,4 @@
-![Matryoshka Logo](./public/images/brand/256h/Logo_x256.png)
+![Matryoshka Logo](./img/Logo_x256.png)
 
 > Android frontend powering the Matryoshka App
 
