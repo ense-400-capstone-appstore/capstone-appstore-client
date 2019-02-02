@@ -47,7 +47,8 @@ public class DrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private LinearLayout appsList;
     private SwipeRefreshLayout refreshLayout;
-    private TextView txv ;
+    //private TextView txv = (TextView) findViewById(R.id.textView);
+    private TextView tvs;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -56,13 +57,13 @@ public class DrawerActivity extends AppCompatActivity
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    txv.setText(R.string.title_home);
+                    tvs.setText(R.string.title_home);
                     return true;
                 case R.id.navigation_dashboard:
-                    txv.setText(R.string.title_dashboard);
+                    tvs.setText(R.string.title_dashboard);
                     return true;
                 case R.id.navigation_notifications:
-                    txv.setText(R.string.title_notifications);
+                    tvs.setText(R.string.title_notifications);
                     return true;
             }
             return false;
@@ -76,8 +77,8 @@ public class DrawerActivity extends AppCompatActivity
         setContentView(R.layout.activity_drawer);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        TextView txv = (TextView)findViewById(R.id.textView);
-
+        tvs = (TextView) findViewById(R.id.textView);
+        tvs.setText("android app");
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,7 +97,8 @@ public class DrawerActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         // Fetch android apps on refresh swipe gesture event
         refreshLayout = findViewById(R.id.swiperefresh);
         refreshLayout.setOnRefreshListener(this::fetchAndroidApps);
