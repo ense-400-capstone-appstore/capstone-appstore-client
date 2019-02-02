@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -68,6 +69,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private static final String[] DUMMY_CREDENTIALS = new String[]{
             "foo@example.com:hello", "bar@example.com:world"
     };
+    //prefs variable for preferences
+    public static final String MY_PREFS_NAME = "MyPrefsFile";
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -342,6 +345,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         Log.i("Status", "Status code " + response.code());
                         Log.i("AndroidLogin", "login response " + response.body());
                         User user = response.body();
+                        //store token in preferences
+                        String tk = user.getSuccess().getToken();
+                        SharedPreferences.Editor editor = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
+                        editor.putString("token", tk);
+                        editor.apply();
+
                         if(user != null) {
                             startActivity(new Intent(LoginActivity.this, DrawerActivity.class));
 
