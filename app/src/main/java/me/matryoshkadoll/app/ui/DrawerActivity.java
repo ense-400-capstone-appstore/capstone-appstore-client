@@ -3,6 +3,8 @@ package me.matryoshkadoll.app.ui;
 import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -45,9 +47,27 @@ public class DrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private LinearLayout appsList;
     private SwipeRefreshLayout refreshLayout;
+    private TextView txv ;
 
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
-
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.navigation_home:
+                    txv.setText(R.string.title_home);
+                    return true;
+                case R.id.navigation_dashboard:
+                    txv.setText(R.string.title_dashboard);
+                    return true;
+                case R.id.navigation_notifications:
+                    txv.setText(R.string.title_notifications);
+                    return true;
+            }
+            return false;
+        }
+    };
 
 
     @Override
@@ -56,6 +76,7 @@ public class DrawerActivity extends AppCompatActivity
         setContentView(R.layout.activity_drawer);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        TextView txv = (TextView)findViewById(R.id.textView);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -75,11 +96,7 @@ public class DrawerActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-
-
-//        super.onCreate(savedInstanceState);
-       // setContentView(R.layout.content_drawer);
-
+        
         // Fetch android apps on refresh swipe gesture event
         refreshLayout = findViewById(R.id.swiperefresh);
         refreshLayout.setOnRefreshListener(this::fetchAndroidApps);
