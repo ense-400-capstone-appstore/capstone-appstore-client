@@ -29,6 +29,14 @@
         <activity
             android:name=".login.LoginActivity"
             android:label="@string/title_activity_login" />
+        <activity
+            android:name=".ui.AppInfoActivity"
+            android:label="@string/title_activity_app_info"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.CategoriesActivity"
+            android:label="@string/title_activity_categories"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
