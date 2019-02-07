@@ -55,9 +55,11 @@ public class DrawerActivity extends AppCompatActivity
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            Intent in;
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     tvs.setText(R.string.title_home);
+
                     return true;
                 case R.id.navigation_dashboard:
                     tvs.setText(R.string.title_dashboard);
