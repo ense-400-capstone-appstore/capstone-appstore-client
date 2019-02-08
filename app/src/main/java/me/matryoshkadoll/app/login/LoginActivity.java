@@ -346,9 +346,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         Log.i("AndroidLogin", "login response " + response.body());
                         User user = response.body();
                         //store token in preferences
-                        String tk = user.getSuccess().getToken();
+                        String tk = user.getData().getAccessToken();
                         SharedPreferences.Editor editor = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
-                        editor.putString("token", tk);
+                        editor.putString("AccessToken", tk);
                         editor.apply();
 
                         if(user != null) {

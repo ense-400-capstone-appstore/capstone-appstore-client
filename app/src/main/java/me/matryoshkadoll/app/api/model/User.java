@@ -4,36 +4,50 @@ package me.matryoshkadoll.app.api.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+
 public class User {
 
-    @SerializedName("success")
+    @SerializedName("data")
     @Expose
-    private Success success;
-
-    public Success getSuccess() {
-        return success;
-    }
-
-    public void setSuccess(Success success) {
-        this.success = success;
-    }
+    private Data data;
 
 
-    public class Success {
+    public class Data {
 
-        @SerializedName("token")
+        @SerializedName("user_id")
         @Expose
-        private String token;
+        private Integer userId;
+        @SerializedName("access_token")
+        @Expose
+        private String accessToken;
 
-        public String getToken() {
-            return token;
+        public Integer getUserId() {
+            return userId;
         }
 
-        public void setToken(String token) {
-            this.token = token;
+        public void setUserId(Integer userId) {
+            this.userId = userId;
+        }
+
+        public String getAccessToken() {
+            return accessToken;
+        }
+
+        public void setAccessToken(String accessToken) {
+            this.accessToken = accessToken;
         }
 
     }
+
+
+    public Data getData() {
+        return data;
+    }
+
+    public void setData(Data data) {
+        this.data = data;
+    }
+
 }
 
 
