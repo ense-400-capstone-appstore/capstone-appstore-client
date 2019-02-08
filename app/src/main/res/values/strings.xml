@@ -30,4 +30,6 @@
     <string name="title_notifications">Notifications</string>
     <string name="title_activity_app_info">AppInfoActivity</string>
     <string name="title_activity_categories">CategoriesActivity</string>
+    <string name="app_description">description</string>
+    <string name="app_rating">rating</string>
 </resources>
