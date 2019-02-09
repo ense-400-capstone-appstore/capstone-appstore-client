@@ -2,6 +2,8 @@ package me.matryoshkadoll.app.ui;
 
 import android.app.ActionBar;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -67,6 +69,16 @@ public class DrawerActivity extends AppCompatActivity
                     return true;
                 case R.id.navigation_notifications:
                     tvs.setText(R.string.title_notifications);
+
+                    final PackageManager packageManager = getPackageManager();
+                    List<ApplicationInfo> installedApplications =
+                            packageManager.getInstalledApplications(PackageManager.GET_META_DATA);
+
+                    for (ApplicationInfo appInfo : installedApplications)
+                    {
+                        Log.i("OUTPUT", "Package name : " + appInfo.packageName);
+                        Log.i("OUTPUT", "Name: " + appInfo.loadLabel(packageManager));
+                    }
                     return true;
             }
             return false;
