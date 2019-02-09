@@ -69,16 +69,9 @@ public class DrawerActivity extends AppCompatActivity
                     return true;
                 case R.id.navigation_notifications:
                     tvs.setText(R.string.title_notifications);
+                    startActivity(new Intent(DrawerActivity.this, UpdateActivity.class));
 
-                    final PackageManager packageManager = getPackageManager();
-                    List<ApplicationInfo> installedApplications =
-                            packageManager.getInstalledApplications(PackageManager.GET_META_DATA);
 
-                    for (ApplicationInfo appInfo : installedApplications)
-                    {
-                        Log.i("OUTPUT", "Package name : " + appInfo.packageName);
-                        Log.i("OUTPUT", "Name: " + appInfo.loadLabel(packageManager));
-                    }
                     return true;
             }
             return false;
