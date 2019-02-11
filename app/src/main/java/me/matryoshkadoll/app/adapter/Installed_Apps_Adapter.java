@@ -16,7 +16,7 @@ import me.matryoshkadoll.app.api.model.InstalledApp;
 public class Installed_Apps_Adapter extends RecyclerView.Adapter<Installed_Apps_Adapter.MyViewHolder> {
 
     private List<InstalledApp> appList;
-    private List<String> values;
+    //private List<String> values;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -31,11 +31,11 @@ public class Installed_Apps_Adapter extends RecyclerView.Adapter<Installed_Apps_
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public Installed_Apps_Adapter(List<String> myDataset) {
-        values = myDataset;
-            //List<InstalledApp> appList) {
+    public Installed_Apps_Adapter(
+            //List<String> myDataset) { values = myDataset;
+            List<InstalledApp> appList) {
 
-        //this.appList = appList;
+        this.appList = appList;
     }
 
     // Create new views (invoked by the layout manager)
@@ -55,19 +55,19 @@ public class Installed_Apps_Adapter extends RecyclerView.Adapter<Installed_Apps_
     public void onBindViewHolder(MyViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        //InstalledApp ip = appList.get(position);
-       // holder.mTextView.setText(ip.getPackageName());
+        InstalledApp ip = appList.get(position);
+       holder.mTextView.setText(ip.getPackageName());
         //holder.itemView.setTag(ip);
-        final String name = values.get(position);
-        holder.mTextView.setText(name);
+        //final String name = values.get(position);
+       // holder.mTextView.setText(name);
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
 
-        //return appList.size();
-        return values.size();
+        return appList.size();
+        //return values.size();
 
     }
 }

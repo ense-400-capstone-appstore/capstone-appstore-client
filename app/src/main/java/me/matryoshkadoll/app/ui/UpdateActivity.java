@@ -48,13 +48,11 @@ public class UpdateActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
 
-        List<String> input = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
-            input.add("Test" + i);
-        }// define an adapter
+        //List<String> input = new ArrayList<>();
+       // for (int i = 0; i < 100; i++) {
+      //      input.add("Test" + i);
+      //  }// define an adapter
 // specify an adapter (see also next example)
-        mAdapter = new Installed_Apps_Adapter(input);
-        mRecyclerView.setAdapter(mAdapter);
 
 
         //fetch installed apps
@@ -77,6 +75,8 @@ public class UpdateActivity extends AppCompatActivity {
 
         }
 
+        mAdapter = new Installed_Apps_Adapter(appList);
+        mRecyclerView.setAdapter(mAdapter);
 
 
 
