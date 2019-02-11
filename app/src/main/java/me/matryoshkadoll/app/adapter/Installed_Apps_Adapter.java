@@ -16,7 +16,7 @@ import me.matryoshkadoll.app.api.model.InstalledApp;
 public class Installed_Apps_Adapter extends RecyclerView.Adapter<Installed_Apps_Adapter.MyViewHolder> {
 
     private List<InstalledApp> appList;
-    //private List<String> values;
+
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -29,10 +29,13 @@ public class Installed_Apps_Adapter extends RecyclerView.Adapter<Installed_Apps_
             mTextView  = (TextView) itemView.findViewById(R.id.firstLine);;
         }
     }
+    public Installed_Apps_Adapter() {
 
+
+    }
     // Provide a suitable constructor (depends on the kind of dataset)
     public Installed_Apps_Adapter(
-            //List<String> myDataset) { values = myDataset;
+
             List<InstalledApp> appList) {
 
         this.appList = appList;
@@ -57,9 +60,7 @@ public class Installed_Apps_Adapter extends RecyclerView.Adapter<Installed_Apps_
         // - replace the contents of the view with that element
         InstalledApp ip = appList.get(position);
        holder.mTextView.setText(ip.getPackageName());
-        //holder.itemView.setTag(ip);
-        //final String name = values.get(position);
-       // holder.mTextView.setText(name);
+
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -67,7 +68,6 @@ public class Installed_Apps_Adapter extends RecyclerView.Adapter<Installed_Apps_
     public int getItemCount() {
 
         return appList.size();
-        //return values.size();
 
     }
 }
