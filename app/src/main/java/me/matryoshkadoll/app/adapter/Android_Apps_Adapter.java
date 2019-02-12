@@ -1,6 +1,8 @@
 package me.matryoshkadoll.app.adapter;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +10,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
 
 import me.matryoshkadoll.app.R;
@@ -21,6 +26,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -88,7 +95,18 @@ public class Android_Apps_Adapter  extends RecyclerView.Adapter<me.matryoshkadol
             holder.mTextView.setText(ip.getName());
             holder.mTextView2.setText(ip.getDescription());
 
-            //holder.mDrawable.setImageDrawable(ip.getDescription());
+
+            try {
+                String url = "https://matryoshkadoll.me/api/v1/android_apps/"+ip.getId()+"/avatar";
+                //String url = ("https://raw.githubusercontent.com/matryoshkadoll/matryoshka-server/master/public/images/brand/64h/Icon_x64.png");
+                Picasso.get().load(url).resize(150, 150).into(holder.mDrawable);
+                //holder.mDrawable.setImageBitmap();
+            }catch (Exception e){
+                System.out.println(e);
+
+            }
+
+
 
         }
 
