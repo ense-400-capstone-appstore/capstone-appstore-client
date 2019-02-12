@@ -1,11 +1,13 @@
 package me.matryoshkadoll.app.adapter;
 
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -24,9 +26,12 @@ public class Installed_Apps_Adapter extends RecyclerView.Adapter<Installed_Apps_
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
         public TextView mTextView;
+        public ImageView mDrawable;
         public MyViewHolder(View v) {
             super(v);
-            mTextView  = (TextView) itemView.findViewById(R.id.firstLine);;
+            mTextView  = (TextView) itemView.findViewById(R.id.list_app_name);
+            mDrawable  = (ImageView) itemView.findViewById(R.id.app_icon);;
+
         }
     }
     public Installed_Apps_Adapter() {
@@ -59,7 +64,8 @@ public class Installed_Apps_Adapter extends RecyclerView.Adapter<Installed_Apps_
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         InstalledApp ip = appList.get(position);
-       holder.mTextView.setText(ip.getPackageName());
+       holder.mTextView.setText(ip.getLabel());
+        holder.mDrawable.setImageDrawable(ip.getIcon());
 
     }
 

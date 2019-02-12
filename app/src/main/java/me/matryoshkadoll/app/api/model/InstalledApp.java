@@ -6,6 +6,16 @@ public class InstalledApp {
     private String label;
     private String packageName;
     private Drawable icon;
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
 
     public Drawable getIcon() {
         return icon;

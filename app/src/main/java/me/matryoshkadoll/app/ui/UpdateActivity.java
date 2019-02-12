@@ -65,6 +65,7 @@ public class UpdateActivity extends AppCompatActivity {
             app.setPackageName(appInfo.packageName);
             app.setLabel(appInfo.loadLabel(packageManager).toString());
             app.setIcon(appInfo.loadIcon(getPackageManager()));
+            app.setName(appInfo.name);
 
             Log.i("OUTPUT", "Package name : " + app.getPackageName());
             Log.i("OUTPUT", "Name: " + app.getLabel());
