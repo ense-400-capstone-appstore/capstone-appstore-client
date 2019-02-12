@@ -12,6 +12,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuInflater;
 import android.view.View;
@@ -36,6 +38,7 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import me.matryoshkadoll.app.R;
+import me.matryoshkadoll.app.adapter.Android_Apps_Adapter;
 import me.matryoshkadoll.app.api.model.AndroidApp;
 import me.matryoshkadoll.app.api.service.matryoshka.AndroidAppsClient;
 import me.matryoshkadoll.app.login.LoginActivity;
@@ -54,6 +57,9 @@ public class DrawerActivity extends AppCompatActivity
     private SwipeRefreshLayout refreshLayout;
     //private TextView txv = (TextView) findViewById(R.id.textView);
     private TextView tvs;
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -98,6 +104,18 @@ public class DrawerActivity extends AppCompatActivity
                         .setAction("Action", null).show();
             }
         });
+
+        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+
+        // use this setting to improve performance if you know that changes
+        // in content do not change the layout size of the RecyclerView
+        mRecyclerView.setHasFixedSize(true);
+
+        // use a linear layout manager
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -155,60 +173,10 @@ public class DrawerActivity extends AppCompatActivity
 
                 // Populate the list with data from the API
                 if (datum != null) {
-                    for(int i=0;i<datum.size();i++) {
-                        CardView androidAppView = new CardView(DrawerActivity.this);
-                        androidAppView.setMaxCardElevation(4);
-                        androidAppView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    // specify an adapter (see also next example)
+                    mAdapter = new Android_Apps_Adapter(datum);
+                    mRecyclerView.setAdapter(mAdapter);
 
-                        // Vertical layout inside card
-                        LinearLayout cardLayout = new LinearLayout(DrawerActivity.this);
-                        cardLayout.setOrientation(LinearLayout.VERTICAL);
-                        LinearLayout.LayoutParams cardLayoutParams = new LinearLayout.LayoutParams(
-                                LinearLayout.LayoutParams.MATCH_PARENT,
-                                LinearLayout.LayoutParams.WRAP_CONTENT
-                        );
-                        cardLayoutParams.setMargins(20, 20, 20, 20);
-                        cardLayout.setLayoutParams(cardLayoutParams);
-
-                        // Title
-                        TextView androidAppName = new TextView(DrawerActivity.this);
-                        androidAppName.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
-                        androidAppName.setText(datum.get(i).getName());
-                        androidAppName.setTextSize(30);
-                        androidAppName.setTextColor(getResources().getColor(R.color.colorPrimary));
-                        cardLayout.addView(androidAppName);
-
-                        // Image
-                       /* if(datum.get(i).getA != null && app.getAvatar() != "empty") {
-                            String baseUrl = "https://matryoshkadoll.me/storage/";
-                            ImageView androidAppAvatar = new ImageView(DrawerActivity.this);
-                            Picasso.get().load(baseUrl + app.getAvatar()).resize(150, 150).into(androidAppAvatar);
-                            cardLayout.addView(androidAppAvatar);
-                        }*/
-
-                        // Description
-                        TextView androidAppDescription = new TextView(DrawerActivity.this);
-                        androidAppDescription.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
-                        androidAppDescription.setText(datum.get(i).getDescription());
-                        androidAppDescription.setTextSize(15);
-                        cardLayout.addView(androidAppDescription);
-
-                        // Price
-                        TextView androidAppPrice = new TextView(DrawerActivity.this);
-                        androidAppPrice.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
-                        androidAppPrice.setText("Price: " + datum.get(i).getPrice());
-                        androidAppPrice.setTextSize(15);
-                        androidAppPrice.setTextColor(getResources().getColor(R.color.colorAccent));
-                        cardLayout.addView(androidAppPrice);
-
-                        // Space between cards
-                        Space androidListSpace = new Space(DrawerActivity.this);
-                        androidListSpace.setLayoutParams(new ViewGroup.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT, 25));
-
-                        androidAppView.addView(cardLayout);
-                        appsList.addView(androidAppView);
-                        appsList.addView(androidListSpace);
-                    }
                 } else {
                     TextView androidAppView = new TextView(DrawerActivity.this);
                     androidAppView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
@@ -216,7 +184,7 @@ public class DrawerActivity extends AppCompatActivity
                     appsList.addView(androidAppView);
                 }
 
-                refreshLayout.setRefreshing(false);
+                //refreshLayout.setRefreshing(false);
             }
 
             @Override
