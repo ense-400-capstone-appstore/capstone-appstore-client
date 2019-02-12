@@ -2,6 +2,7 @@ package me.matryoshkadoll.app.ui;
 
 import android.app.ActionBar;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -45,6 +46,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static me.matryoshkadoll.app.login.LoginActivity.MY_PREFS_NAME;
+
 public class DrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private LinearLayout appsList;
@@ -67,8 +70,8 @@ public class DrawerActivity extends AppCompatActivity
                     tvs.setText(R.string.title_dashboard);
                     startActivity(new Intent(DrawerActivity.this, CategoriesActivity.class));
                     return true;
-                case R.id.navigation_notifications:
-                    tvs.setText(R.string.title_notifications);
+                case R.id.navigation_update:
+                    tvs.setText(R.string.title_update);
                     startActivity(new Intent(DrawerActivity.this, UpdateActivity.class));
 
 
@@ -121,8 +124,11 @@ public class DrawerActivity extends AppCompatActivity
 
         // HTTP API connection setup
         AndroidAppsClient client = RetrofitClientInstance.getRetrofitInstance().create(AndroidAppsClient.class);
-
-        Call<List<AndroidApp>> call = client.androidApps();
+        String Bearer = "Bearer ";
+        //fetch token
+        SharedPreferences prefs = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
+        String An = prefs.getString("AccessToken", "No name defined");
+        Call<AndroidApp> call = client.androidApps(Bearer+An);
 
         // Notify user that fetch is in progress
         appsList.removeAllViews();
@@ -133,11 +139,14 @@ public class DrawerActivity extends AppCompatActivity
 
 
         // HTTP callback
-        call.enqueue(new Callback<List<AndroidApp>>() {
+        call.enqueue(new Callback <AndroidApp>() {
             @Override
-            public void onResponse(Call<List<AndroidApp>> call, Response<List<AndroidApp>> response) {
+            public void onResponse(Call<AndroidApp> call, Response<AndroidApp> response) {
                 // Get data from response
-                List<AndroidApp> androidApps = response.body();
+                AndroidApp androidApps = response.body();
+
+                List<AndroidApp.Datum> datum = androidApps.getData();
+
                 Log.i("Status", "Status code " + response.code());
                 Log.i("AndroidAppsFetched", "Fetched " + response.body());
 
@@ -145,8 +154,8 @@ public class DrawerActivity extends AppCompatActivity
                 appsList.removeAllViews();
 
                 // Populate the list with data from the API
-                if (androidApps != null) {
-                    for(AndroidApp app : androidApps) {
+                if (datum != null) {
+                    for(int i=0;i<datum.size();i++) {
                         CardView androidAppView = new CardView(DrawerActivity.this);
                         androidAppView.setMaxCardElevation(4);
                         androidAppView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -164,30 +173,30 @@ public class DrawerActivity extends AppCompatActivity
                         // Title
                         TextView androidAppName = new TextView(DrawerActivity.this);
                         androidAppName.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
-                        androidAppName.setText(app.getName());
+                        androidAppName.setText(datum.get(i).getName());
                         androidAppName.setTextSize(30);
                         androidAppName.setTextColor(getResources().getColor(R.color.colorPrimary));
                         cardLayout.addView(androidAppName);
 
                         // Image
-                        if(app.getAvatar() != null && app.getAvatar() != "empty") {
+                       /* if(datum.get(i).getA != null && app.getAvatar() != "empty") {
                             String baseUrl = "https://matryoshkadoll.me/storage/";
                             ImageView androidAppAvatar = new ImageView(DrawerActivity.this);
                             Picasso.get().load(baseUrl + app.getAvatar()).resize(150, 150).into(androidAppAvatar);
                             cardLayout.addView(androidAppAvatar);
-                        }
+                        }*/
 
                         // Description
                         TextView androidAppDescription = new TextView(DrawerActivity.this);
                         androidAppDescription.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
-                        androidAppDescription.setText(app.getDescription());
+                        androidAppDescription.setText(datum.get(i).getDescription());
                         androidAppDescription.setTextSize(15);
                         cardLayout.addView(androidAppDescription);
 
                         // Price
                         TextView androidAppPrice = new TextView(DrawerActivity.this);
                         androidAppPrice.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
-                        androidAppPrice.setText("Price: " + app.getPrice());
+                        androidAppPrice.setText("Price: " + datum.get(i).getPrice());
                         androidAppPrice.setTextSize(15);
                         androidAppPrice.setTextColor(getResources().getColor(R.color.colorAccent));
                         cardLayout.addView(androidAppPrice);
@@ -211,7 +220,7 @@ public class DrawerActivity extends AppCompatActivity
             }
 
             @Override
-            public void onFailure(Call<List<AndroidApp>> call, Throwable t) {
+            public void onFailure(Call<AndroidApp> call, Throwable t) {
                 Toast.makeText(DrawerActivity.this, "Error fetching Android Apps!", Toast.LENGTH_SHORT).show();
                 refreshLayout.setRefreshing(false);
             }
@@ -279,6 +288,7 @@ public class DrawerActivity extends AppCompatActivity
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
+
 
         } else if (id == R.id.nav_share) {
 

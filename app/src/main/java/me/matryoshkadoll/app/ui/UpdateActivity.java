@@ -2,6 +2,7 @@ package me.matryoshkadoll.app.ui;
 
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -48,11 +49,7 @@ public class UpdateActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
 
-        //List<String> input = new ArrayList<>();
-       // for (int i = 0; i < 100; i++) {
-      //      input.add("Test" + i);
-      //  }// define an adapter
-// specify an adapter (see also next example)
+
 
 
         //fetch installed apps
@@ -61,19 +58,23 @@ public class UpdateActivity extends AppCompatActivity {
                 packageManager.getInstalledApplications(PackageManager.GET_META_DATA);
 
 
-        //LinearLayout appsList = findViewById(R.id.android_apps_installed);
-
         for (ApplicationInfo appInfo : installedApplications)
         {
 
             InstalledApp app = new InstalledApp();
             app.setPackageName(appInfo.packageName);
             app.setLabel(appInfo.loadLabel(packageManager).toString());
+            app.setIcon(appInfo.loadIcon(getPackageManager()));
+            app.setName(appInfo.name);
+
             Log.i("OUTPUT", "Package name : " + app.getPackageName());
             Log.i("OUTPUT", "Name: " + app.getLabel());
             appList.add(app);
 
         }
+
+
+        // specify an adapter (see also next example)
 
         mAdapter = new Installed_Apps_Adapter(appList);
         mRecyclerView.setAdapter(mAdapter);

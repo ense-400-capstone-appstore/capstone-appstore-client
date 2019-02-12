@@ -350,6 +350,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         SharedPreferences.Editor editor = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
                         editor.putString("AccessToken", tk);
                         editor.apply();
+                        //fetch token
+                        SharedPreferences prefs = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
+                        String An = prefs.getString("AccessToken", "No name defined");
 
                         if(user != null) {
                             startActivity(new Intent(LoginActivity.this, DrawerActivity.class));
