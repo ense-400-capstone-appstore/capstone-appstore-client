@@ -1,5 +1,6 @@
 package me.matryoshkadoll.app.adapter;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +26,8 @@ import java.util.List;
 
 import me.matryoshkadoll.app.R;
 import me.matryoshkadoll.app.api.model.AndroidApp;
+import me.matryoshkadoll.app.ui.AppInfoActivity;
+
 public class Android_Apps_Adapter  extends RecyclerView.Adapter<me.matryoshkadoll.app.adapter.Android_Apps_Adapter.MyViewHolder> {
 
         private List<AndroidApp.Datum> appList;
@@ -44,7 +47,12 @@ public class Android_Apps_Adapter  extends RecyclerView.Adapter<me.matryoshkadol
                 mTextView  = (TextView) itemView.findViewById(R.id.list_app_name);
                 mDrawable  = (ImageView) itemView.findViewById(R.id.app_icon);;
                 mTextView2  = (TextView) itemView.findViewById(R.id.description);
-
+                v.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        v.getContext().startActivity(new Intent(v.getContext(), AppInfoActivity.class));
+                    }
+                });
             }
         }
         public Android_Apps_Adapter() {
