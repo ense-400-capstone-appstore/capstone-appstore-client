@@ -184,7 +184,7 @@ public class DrawerActivity extends AppCompatActivity
                     appsList.addView(androidAppView);
                 }
 
-                //refreshLayout.setRefreshing(false);
+                refreshLayout.setRefreshing(false);
             }
 
             @Override
