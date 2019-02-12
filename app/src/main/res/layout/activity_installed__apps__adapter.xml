@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    card_view:cardBackgroundColor="#6075E0"
+    card_view:cardBackgroundColor="#f8efe7"
     card_view:cardCornerRadius="8dp"
     card_view:cardElevation="8dp">
 
@@ -30,7 +30,7 @@
         android:layout_height="wrap_content"
         android:textStyle="bold"
         android:textSize="16dp"
-        android:textColor="#000000"
+        android:textColor="#6075E0"
         android:layout_toRightOf="@+id/app_icon"
         android:layout_alignTop="@+id/app_icon"
         android:layout_marginLeft="16dp"
