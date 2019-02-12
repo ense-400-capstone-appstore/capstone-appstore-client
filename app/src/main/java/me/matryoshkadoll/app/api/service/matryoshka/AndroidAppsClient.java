@@ -22,7 +22,7 @@ import retrofit2.http.Path;
 
 public interface AndroidAppsClient {
     @GET("android_apps")
-    Call<List<AndroidApp>> androidApps();
+    Call<AndroidApp> androidApps(@Header("Authorization") String authorization);
 
 
     @Headers({"Accept:application/json",
