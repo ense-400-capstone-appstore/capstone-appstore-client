@@ -36,11 +36,14 @@ public class Android_Apps_Adapter  extends RecyclerView.Adapter<me.matryoshkadol
         public static class MyViewHolder extends RecyclerView.ViewHolder {
             // each data item is just a string in this case
             public TextView mTextView;
+            public TextView mTextView2;
+
             public ImageView mDrawable;
             public MyViewHolder(View v) {
                 super(v);
                 mTextView  = (TextView) itemView.findViewById(R.id.list_app_name);
                 mDrawable  = (ImageView) itemView.findViewById(R.id.app_icon);;
+                mTextView2  = (TextView) itemView.findViewById(R.id.description);
 
             }
         }
@@ -75,6 +78,8 @@ public class Android_Apps_Adapter  extends RecyclerView.Adapter<me.matryoshkadol
             // - replace the contents of the view with that element
             AndroidApp.Datum ip = appList.get(position);
             holder.mTextView.setText(ip.getName());
+            holder.mTextView2.setText(ip.getDescription());
+
             //holder.mDrawable.setImageDrawable(ip.getDescription());
 
         }
