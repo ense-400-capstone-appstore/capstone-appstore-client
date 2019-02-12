@@ -67,8 +67,8 @@ public class DrawerActivity extends AppCompatActivity
                     tvs.setText(R.string.title_dashboard);
                     startActivity(new Intent(DrawerActivity.this, CategoriesActivity.class));
                     return true;
-                case R.id.navigation_notifications:
-                    tvs.setText(R.string.title_notifications);
+                case R.id.navigation_update:
+                    tvs.setText(R.string.title_update);
                     startActivity(new Intent(DrawerActivity.this, UpdateActivity.class));
 
 

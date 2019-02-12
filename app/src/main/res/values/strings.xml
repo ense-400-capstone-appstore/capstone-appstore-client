@@ -33,4 +33,5 @@
     <string name="app_description">description</string>
     <string name="app_rating">rating</string>
     <string name="title_activity_update">UpdateActivity</string>
+    <string name="title_update">update</string>
 </resources>
