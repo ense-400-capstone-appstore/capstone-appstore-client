@@ -29,7 +29,7 @@ public class Android_Apps_Adapter  extends RecyclerView.Adapter<me.matryoshkadol
         private List<AndroidApp.Datum> appList;
     private Context context;
 private String token;
-
+private static int appid;
         // Provide a reference to the views for each data item
         // Complex data items may need more than one view per item, and
         // you provide access to all the views for a data item in a view holder
@@ -44,10 +44,15 @@ private String token;
                 mTextView  = (TextView) itemView.findViewById(R.id.list_app_name);
                 mDrawable  = (ImageView) itemView.findViewById(R.id.app_icon);;
                 mTextView2  = (TextView) itemView.findViewById(R.id.description);
-                v.setOnClickListener(new View.OnClickListener() {
+                v.setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View view) {
-                        v.getContext().startActivity(new Intent(v.getContext(), AppInfoActivity.class));
+
+                        Intent it= new Intent(v.getContext(), AppInfoActivity.class);
+                        it.putExtra("app_id",appid);
+                        v.getContext().startActivity(it);
+
+
                     }
                 });
             }
@@ -87,11 +92,9 @@ private String token;
             AndroidApp.Datum ip = appList.get(position);
             holder.mTextView.setText(ip.getName());
             holder.mTextView2.setText(ip.getDescription());
+            appid = ip.getId();
 
-
-                String url = "https://matryoshkadoll.me/api/v1/android_apps/"+ip.getId().toString()+"/avatar";
-                //picasso.load(url).into(holder.mDrawable);
-                //holder.mDrawable.setImageBitmap();
+            String url = "https://matryoshkadoll.me/api/v1/android_apps/"+ip.getId().toString()+"/avatar";
 
             OkHTTPClientInstance aa = new OkHTTPClientInstance();
             Picasso picasso = new Picasso.Builder(context)
