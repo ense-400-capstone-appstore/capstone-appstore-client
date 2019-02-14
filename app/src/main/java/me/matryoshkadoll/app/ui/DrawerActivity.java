@@ -177,7 +177,7 @@ public class DrawerActivity extends AppCompatActivity
                 // Populate the list with data from the API
                 if (datum != null) {
                     // specify an adapter (see also next example)
-                    mAdapter = new Android_Apps_Adapter(datum);
+                    mAdapter = new Android_Apps_Adapter(datum, getApplicationContext(),Bearer+An );
                     mRecyclerView.setAdapter(mAdapter);
 
                 } else {
