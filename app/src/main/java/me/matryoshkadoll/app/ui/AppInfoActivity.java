@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import me.matryoshkadoll.app.R;
-//import me.matryoshkadoll.app.R;
 
 public class AppInfoActivity extends AppCompatActivity {
 
