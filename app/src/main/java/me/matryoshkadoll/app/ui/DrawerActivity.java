@@ -1,21 +1,16 @@
 package me.matryoshkadoll.app.ui;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.MenuInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -25,17 +20,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.Space;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.squareup.picasso.Picasso;
-
 import java.util.List;
+
 
 import me.matryoshkadoll.app.R;
 import me.matryoshkadoll.app.adapter.Android_Apps_Adapter;
@@ -46,8 +35,6 @@ import me.matryoshkadoll.app.network.RetrofitClientInstance;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 import static me.matryoshkadoll.app.login.LoginActivity.MY_PREFS_NAME;
 
@@ -134,6 +121,7 @@ public class DrawerActivity extends AppCompatActivity
 
         // Fetch android apps now
         fetchAndroidApps();
+
     }
 
     protected void fetchAndroidApps() {
@@ -174,7 +162,7 @@ public class DrawerActivity extends AppCompatActivity
                 // Populate the list with data from the API
                 if (datum != null) {
                     // specify an adapter (see also next example)
-                    mAdapter = new Android_Apps_Adapter(datum);
+                    mAdapter = new Android_Apps_Adapter(datum, getApplicationContext(),Bearer+An );
                     mRecyclerView.setAdapter(mAdapter);
 
                 } else {
@@ -184,7 +172,7 @@ public class DrawerActivity extends AppCompatActivity
                     appsList.addView(androidAppView);
                 }
 
-                //refreshLayout.setRefreshing(false);
+                refreshLayout.setRefreshing(false);
             }
 
             @Override

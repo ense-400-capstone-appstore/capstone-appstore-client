@@ -32,15 +32,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import me.matryoshkadoll.app.R;
-import me.matryoshkadoll.app.api.model.AndroidApp;
 import me.matryoshkadoll.app.api.model.User;
 import me.matryoshkadoll.app.api.model.UserInfo;
 import me.matryoshkadoll.app.api.service.matryoshka.AndroidAppsClient;

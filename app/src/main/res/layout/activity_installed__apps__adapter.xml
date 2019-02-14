@@ -26,7 +26,6 @@
             android:layout_alignParentTop="true"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
-            android:contentDescription="hello_world"
             android:paddingBottom="8dp" />
 
         <TextView

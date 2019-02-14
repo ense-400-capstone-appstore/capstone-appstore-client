@@ -1,5 +1,8 @@
 package me.matryoshkadoll.app.adapter;
 
+import android.content.Context;
+import android.content.Intent;
+
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,28 +10,25 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.List;
 
-import me.matryoshkadoll.app.R;
-import me.matryoshkadoll.app.api.model.InstalledApp;
-import android.graphics.drawable.Drawable;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
+import com.squareup.picasso.OkHttp3Downloader;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 import me.matryoshkadoll.app.R;
+
 import me.matryoshkadoll.app.api.model.AndroidApp;
+
+import me.matryoshkadoll.app.network.OkHTTPClientInstance;
+import me.matryoshkadoll.app.ui.AppInfoActivity;
+
+
 public class Android_Apps_Adapter  extends RecyclerView.Adapter<me.matryoshkadoll.app.adapter.Android_Apps_Adapter.MyViewHolder> {
 
         private List<AndroidApp.Datum> appList;
-
+    private Context context;
+private String token;
 
         // Provide a reference to the views for each data item
         // Complex data items may need more than one view per item, and
@@ -44,7 +44,12 @@ public class Android_Apps_Adapter  extends RecyclerView.Adapter<me.matryoshkadol
                 mTextView  = (TextView) itemView.findViewById(R.id.list_app_name);
                 mDrawable  = (ImageView) itemView.findViewById(R.id.app_icon);;
                 mTextView2  = (TextView) itemView.findViewById(R.id.description);
-
+                v.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        v.getContext().startActivity(new Intent(v.getContext(), AppInfoActivity.class));
+                    }
+                });
             }
         }
         public Android_Apps_Adapter() {
@@ -54,9 +59,12 @@ public class Android_Apps_Adapter  extends RecyclerView.Adapter<me.matryoshkadol
         // Provide a suitable constructor (depends on the kind of dataset)
         public Android_Apps_Adapter(
 
-                List<AndroidApp.Datum> appList) {
+                List<AndroidApp.Datum> appList ,Context context ,String token) {
 
             this.appList = appList;
+            this.context = context;
+            this.token = token;
+
         }
 
         // Create new views (invoked by the layout manager)
@@ -80,9 +88,22 @@ public class Android_Apps_Adapter  extends RecyclerView.Adapter<me.matryoshkadol
             holder.mTextView.setText(ip.getName());
             holder.mTextView2.setText(ip.getDescription());
 
-            //holder.mDrawable.setImageDrawable(ip.getDescription());
+
+                String url = "https://matryoshkadoll.me/api/v1/android_apps/"+ip.getId().toString()+"/avatar";
+                //picasso.load(url).into(holder.mDrawable);
+                //holder.mDrawable.setImageBitmap();
+
+            OkHTTPClientInstance aa = new OkHTTPClientInstance();
+            Picasso picasso = new Picasso.Builder(context)
+                    .downloader(new OkHttp3Downloader(aa.getAvatar(token)))
+                    .build();
+            picasso.load(url).into(holder.mDrawable);
+
 
         }
+
+
+
 
         // Return the size of your dataset (invoked by the layout manager)
         @Override
@@ -91,5 +112,7 @@ public class Android_Apps_Adapter  extends RecyclerView.Adapter<me.matryoshkadol
             return appList.size();
 
         }
+
+
     }
 
