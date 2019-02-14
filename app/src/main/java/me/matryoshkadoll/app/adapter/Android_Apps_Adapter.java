@@ -29,7 +29,6 @@ public class Android_Apps_Adapter  extends RecyclerView.Adapter<me.matryoshkadol
         private List<AndroidApp.Datum> appList;
     private Context context;
 private String token;
-private static int appid;
         // Provide a reference to the views for each data item
         // Complex data items may need more than one view per item, and
         // you provide access to all the views for a data item in a view holder
@@ -37,6 +36,7 @@ private static int appid;
             // each data item is just a string in this case
             public TextView mTextView;
             public TextView mTextView2;
+            private int appid;
 
             public ImageView mDrawable;
             public MyViewHolder(View v) {
@@ -92,7 +92,7 @@ private static int appid;
             AndroidApp.Datum ip = appList.get(position);
             holder.mTextView.setText(ip.getName());
             holder.mTextView2.setText(ip.getDescription());
-            appid = ip.getId();
+            holder.appid = ip.getId();
 
             String url = "https://matryoshkadoll.me/api/v1/android_apps/"+ip.getId().toString()+"/avatar";
 
