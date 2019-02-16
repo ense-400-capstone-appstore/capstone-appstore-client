@@ -20,9 +20,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.squareup.picasso.OkHttp3Downloader;
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 
@@ -32,6 +37,7 @@ import me.matryoshkadoll.app.api.model.AndroidApp;
 import me.matryoshkadoll.app.api.model.UserName;
 import me.matryoshkadoll.app.api.service.matryoshka.AndroidAppsClient;
 import me.matryoshkadoll.app.login.LoginActivity;
+import me.matryoshkadoll.app.network.OkHTTPClientInstance;
 import me.matryoshkadoll.app.network.RetrofitClientInstance;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -116,6 +122,14 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
         SharedPreferences prefs = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
         String An = prefs.getString("AccessToken", "No name defined");
         int userid = prefs.getInt("UserId",1);
+        String url = "https://matryoshkadoll.me/api/v1/users/"+userid+"/avatar";
+
+        OkHTTPClientInstance aa = new OkHTTPClientInstance();
+        Picasso picasso = new Picasso.Builder(this)
+                .downloader(new OkHttp3Downloader(aa.getAvatar(An)))
+                .build();
+        ImageView useravatat = (ImageView) hView.findViewById(R.id.imageView);
+        picasso.load(url).into(useravatat);
 
         Call<UserName> calluser = client.GetUserName(An,userid);
         // HTTP callback
