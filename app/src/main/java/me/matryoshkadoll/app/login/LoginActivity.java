@@ -341,13 +341,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         Log.i("AndroidLogin", "login response " + response.body());
                         User user = response.body();
                         //store token in preferences
-                        String tk = user.getData().getAccessToken();
+                        String tk = "Bearer "+user.getData().getAccessToken();
                         SharedPreferences.Editor editor = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
                         editor.putString("AccessToken", tk);
                         editor.apply();
                         //fetch token
-                        SharedPreferences prefs = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
-                        String An = prefs.getString("AccessToken", "No name defined");
+
 
                         if(user != null) {
                             startActivity(new Intent(LoginActivity.this, DrawerActivity.class));

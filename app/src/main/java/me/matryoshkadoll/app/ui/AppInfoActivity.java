@@ -28,17 +28,7 @@ public class AppInfoActivity extends AppCompatActivity {
     private Button button;
     private long downloadID;
     private  String AppId;
-    private BroadcastReceiver onDownloadComplete = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            //Fetching the download id received with the broadcast
-            long id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
-            //Checking if the received broadcast is for our enqueued download by matching download id
-            if (downloadID == id) {
-                Toast.makeText(AppInfoActivity.this, "Download Completed", Toast.LENGTH_SHORT).show();
-            }
-        }
-    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,25 +54,20 @@ public class AppInfoActivity extends AppCompatActivity {
     }
 // under oncreate
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        unregisterReceiver(onDownloadComplete);
-    }
+
     private void beginDownload(){
-        File file=new File(getExternalFilesDir(null),"Dummy");
+        File file=new File(getExternalFilesDir(null),AppId+".apk");
         /*
         Create a DownloadManager.Request with all the information necessary to start the download
          */
         String url = "https://matryoshkadoll.me/api/v1/android_apps/"+AppId+"/file";
-        String Bearer = "Bearer ";
         //fetch token
         SharedPreferences prefs = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
         String An = prefs.getString("AccessToken", "No name defined");
 
         DownloadManager.Request request=new DownloadManager.Request(Uri.parse(url))
-                .addRequestHeader("Authorization", Bearer+An)
-                .setTitle("Dummy File.apk")// Title of the Download Notification
+                .addRequestHeader("Authorization", An)
+                .setTitle(AppId+".apk")// Title of the Download Notification
                 .setDescription("Downloading")// Description of the Download Notification
                 .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)// Visibility of the download Notification
                 .setDestinationUri(Uri.fromFile(file))// Uri of the destination file

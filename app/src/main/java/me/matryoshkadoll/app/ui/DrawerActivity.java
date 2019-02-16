@@ -130,11 +130,10 @@ public class DrawerActivity extends AppCompatActivity
 
         // HTTP API connection setup
         AndroidAppsClient client = RetrofitClientInstance.getRetrofitInstance().create(AndroidAppsClient.class);
-        String Bearer = "Bearer ";
         //fetch token
         SharedPreferences prefs = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
         String An = prefs.getString("AccessToken", "No name defined");
-        Call<AndroidApp> call = client.androidApps(Bearer+An);
+        Call<AndroidApp> call = client.androidApps(An);
 
         // Notify user that fetch is in progress
         appsList.removeAllViews();
@@ -150,8 +149,9 @@ public class DrawerActivity extends AppCompatActivity
             public void onResponse(Call<AndroidApp> call, Response<AndroidApp> response) {
                 // Get data from response
                 AndroidApp androidApps = response.body();
-
+                if(androidApps != null){
                 List<AndroidApp.Datum> datum = androidApps.getData();
+
 
                 Log.i("Status", "Status code " + response.code());
                 Log.i("AndroidAppsFetched", "Fetched " + response.body());
@@ -162,7 +162,7 @@ public class DrawerActivity extends AppCompatActivity
                 // Populate the list with data from the API
                 if (datum != null) {
                     // specify an adapter (see also next example)
-                    mAdapter = new Android_Apps_Adapter(datum, getApplicationContext(),Bearer+An );
+                    mAdapter = new Android_Apps_Adapter(datum, getApplicationContext(),An );
                     mRecyclerView.setAdapter(mAdapter);
 
                 } else {
@@ -171,7 +171,7 @@ public class DrawerActivity extends AppCompatActivity
                     androidAppView.setText("There are no apps.");
                     appsList.addView(androidAppView);
                 }
-
+            }
                 refreshLayout.setRefreshing(false);
             }
 
