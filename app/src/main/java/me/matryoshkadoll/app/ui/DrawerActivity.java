@@ -29,6 +29,7 @@ import java.util.List;
 import me.matryoshkadoll.app.R;
 import me.matryoshkadoll.app.adapter.Android_Apps_Adapter;
 import me.matryoshkadoll.app.api.model.AndroidApp;
+import me.matryoshkadoll.app.api.model.UserName;
 import me.matryoshkadoll.app.api.service.matryoshka.AndroidAppsClient;
 import me.matryoshkadoll.app.login.LoginActivity;
 import me.matryoshkadoll.app.network.RetrofitClientInstance;
@@ -38,11 +39,8 @@ import retrofit2.Response;
 
 import static me.matryoshkadoll.app.login.LoginActivity.MY_PREFS_NAME;
 
-public class DrawerActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
-    private LinearLayout appsList;
+public class DrawerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private SwipeRefreshLayout refreshLayout;
-    //private TextView txv = (TextView) findViewById(R.id.textView);
     private TextView tvs;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -103,7 +101,6 @@ public class DrawerActivity extends AppCompatActivity
         mRecyclerView.setLayoutManager(mLayoutManager);
 
 
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -112,6 +109,33 @@ public class DrawerActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        View hView =  navigationView.getHeaderView(0);
+        TextView nav_user = (TextView)hView.findViewById(R.id.textView);
+        AndroidAppsClient client = RetrofitClientInstance.getRetrofitInstance().create(AndroidAppsClient.class);
+        //fetch token
+        SharedPreferences prefs = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
+        String An = prefs.getString("AccessToken", "No name defined");
+        int userid = prefs.getInt("UserId",1);
+
+        Call<UserName> calluser = client.GetUserName(An,userid);
+        // HTTP callback
+        calluser.enqueue(new Callback <UserName>() {
+            @Override
+            public void onResponse(Call<UserName> call, Response<UserName> response) {
+                // Get data from response
+                UserName myUserName = response.body();
+                if(myUserName != null){
+                    nav_user.setText(myUserName.getData().getEmail());
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserName> call, Throwable t) {
+                Toast.makeText(DrawerActivity.this, "Error get username!", Toast.LENGTH_SHORT).show();
+                refreshLayout.setRefreshing(false);
+            }
+        });
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
