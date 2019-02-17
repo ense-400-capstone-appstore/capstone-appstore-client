@@ -4,6 +4,7 @@ import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -28,6 +29,7 @@ public class AppInfoActivity extends AppCompatActivity {
     private Button button;
     private long downloadID;
     private  String AppId;
+    private TextView rating;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +52,10 @@ public class AppInfoActivity extends AppCompatActivity {
 
             }
         });
+        registerReceiver(onComplete,
+                new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+        registerReceiver(onNotificationClick,
+                new IntentFilter(DownloadManager.ACTION_NOTIFICATION_CLICKED));
 
     }
 // under oncreate
@@ -76,5 +82,18 @@ public class AppInfoActivity extends AppCompatActivity {
         DownloadManager downloadManager= (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
         downloadID = downloadManager.enqueue(request);// enqueue puts the download request in the queue.
     }
+    BroadcastReceiver onComplete=new BroadcastReceiver() {
+        public void onReceive(Context ctxt, Intent intent) {
+            rating = findViewById(R.id.editText2); //Enabled(true);
+            rating.setText("Download success");
+        }
+    };
 
+    BroadcastReceiver onNotificationClick=new BroadcastReceiver() {
+        public void onReceive(Context ctxt, Intent intent) {
+            Toast.makeText(ctxt, "Downloadinggggggg!", Toast.LENGTH_LONG).show();
+        }
+    };
 }
+
+
