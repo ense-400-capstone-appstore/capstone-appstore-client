@@ -1,8 +1,10 @@
 package me.matryoshkadoll.app.ui;
 
+import android.app.AlertDialog;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -30,6 +32,7 @@ public class AppInfoActivity extends AppCompatActivity {
     private long downloadID;
     private  String AppId;
     private TextView rating;
+    AlertDialog.Builder builder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,11 +48,31 @@ public class AppInfoActivity extends AppCompatActivity {
         AppId=Integer.toString(tt);
 
         button=findViewById(R.id.button);
+        builder = new AlertDialog.Builder(this);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                beginDownload();
+            public void onClick(View v) {
 
+                builder.setTitle("Confirm Download")
+                .setMessage("Are you sure you want to Download this app ?")
+                        .setCancelable(false)
+                        .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                beginDownload();
+                                Toast.makeText(getApplicationContext(),"Download Begins",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                                Toast.makeText(getApplicationContext(),"Download Stopped",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                //Creating dialog box
+                AlertDialog alert = builder.create();
+                alert.show();
             }
         });
         registerReceiver(onComplete,
@@ -84,8 +107,8 @@ public class AppInfoActivity extends AppCompatActivity {
     }
     BroadcastReceiver onComplete=new BroadcastReceiver() {
         public void onReceive(Context ctxt, Intent intent) {
-            rating = findViewById(R.id.editText2); //Enabled(true);
-            rating.setText("Download success");
+
+            Toast.makeText(ctxt, "Download Complete!", Toast.LENGTH_LONG).show();
         }
     };
 
