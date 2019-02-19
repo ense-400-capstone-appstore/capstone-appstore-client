@@ -95,7 +95,13 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
                         .setAction("Action", null).show();
             }
         });
+        SharedPreferences prefs = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
+        String An = prefs.getString("AccessToken", "No name defined");
+        if(An=="No name defined"){
+            Intent loginPageIntent = new Intent(getApplicationContext(), LoginActivity.class);
 
+            startActivity(loginPageIntent);
+        }
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
 
         // use this setting to improve performance if you know that changes
@@ -119,8 +125,7 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
         TextView nav_user = (TextView)hView.findViewById(R.id.textView);
         AndroidAppsClient client = RetrofitClientInstance.getRetrofitInstance().create(AndroidAppsClient.class);
         //fetch token
-        SharedPreferences prefs = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
-        String An = prefs.getString("AccessToken", "No name defined");
+
         int userid = prefs.getInt("UserId",1);
         String url = "https://matryoshkadoll.me/api/v1/users/"+userid+"/avatar";
 
@@ -164,7 +169,6 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
 
     protected void fetchAndroidApps() {
         // View to populate android apps into
-        LinearLayout appsList = findViewById(R.id.android_apps_list);
 
         // HTTP API connection setup
         AndroidAppsClient client = RetrofitClientInstance.getRetrofitInstance().create(AndroidAppsClient.class);
@@ -174,11 +178,9 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
         Call<AndroidApp> call = client.androidApps(An);
 
         // Notify user that fetch is in progress
-        appsList.removeAllViews();
         TextView androidAppView = new TextView(DrawerActivity.this);
         androidAppView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         androidAppView.setText("Fetching apps from server ...");
-        appsList.addView(androidAppView);
 
 
         // HTTP callback
@@ -195,7 +197,6 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
                 Log.i("AndroidAppsFetched", "Fetched " + response.body());
 
                 // Remove all current items in the list
-                appsList.removeAllViews();
 
                 // Populate the list with data from the API
                 if (datum != null) {
@@ -207,7 +208,6 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
                     TextView androidAppView = new TextView(DrawerActivity.this);
                     androidAppView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                     androidAppView.setText("There are no apps.");
-                    appsList.addView(androidAppView);
                 }
             }
                 refreshLayout.setRefreshing(false);
@@ -280,6 +280,14 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
 
             startActivity(intent);
         } else if (id == R.id.nav_slideshow) {
+
+                    SharedPreferences myPrefs = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
+                    SharedPreferences.Editor editor = myPrefs.edit();
+                    editor.clear();
+                    editor.commit();
+                    Intent loginPageIntent = new Intent(getApplicationContext(), LoginActivity.class);
+
+                    startActivity(loginPageIntent);
 
         } else if (id == R.id.nav_manage) {
 
