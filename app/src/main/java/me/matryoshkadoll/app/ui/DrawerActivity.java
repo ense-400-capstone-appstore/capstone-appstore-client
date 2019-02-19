@@ -20,17 +20,24 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.squareup.picasso.OkHttp3Downloader;
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 
 import me.matryoshkadoll.app.R;
 import me.matryoshkadoll.app.adapter.Android_Apps_Adapter;
 import me.matryoshkadoll.app.api.model.AndroidApp;
+import me.matryoshkadoll.app.api.model.UserName;
 import me.matryoshkadoll.app.api.service.matryoshka.AndroidAppsClient;
 import me.matryoshkadoll.app.login.LoginActivity;
+import me.matryoshkadoll.app.network.OkHTTPClientInstance;
 import me.matryoshkadoll.app.network.RetrofitClientInstance;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -38,11 +45,8 @@ import retrofit2.Response;
 
 import static me.matryoshkadoll.app.login.LoginActivity.MY_PREFS_NAME;
 
-public class DrawerActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
-    private LinearLayout appsList;
+public class DrawerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private SwipeRefreshLayout refreshLayout;
-    //private TextView txv = (TextView) findViewById(R.id.textView);
     private TextView tvs;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -91,7 +95,13 @@ public class DrawerActivity extends AppCompatActivity
                         .setAction("Action", null).show();
             }
         });
+        SharedPreferences prefs = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
+        String An = prefs.getString("AccessToken", "No name defined");
+        if(An=="No name defined"){
+            Intent loginPageIntent = new Intent(getApplicationContext(), LoginActivity.class);
 
+            startActivity(loginPageIntent);
+        }
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
 
         // use this setting to improve performance if you know that changes
@@ -103,7 +113,6 @@ public class DrawerActivity extends AppCompatActivity
         mRecyclerView.setLayoutManager(mLayoutManager);
 
 
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -112,6 +121,40 @@ public class DrawerActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        View hView =  navigationView.getHeaderView(0);
+        TextView nav_user = (TextView)hView.findViewById(R.id.textView);
+        AndroidAppsClient client = RetrofitClientInstance.getRetrofitInstance().create(AndroidAppsClient.class);
+        //fetch token
+
+        int userid = prefs.getInt("UserId",1);
+        String url = "https://matryoshkadoll.me/api/v1/users/"+userid+"/avatar";
+
+        OkHTTPClientInstance aa = new OkHTTPClientInstance();
+        Picasso picasso = new Picasso.Builder(this)
+                .downloader(new OkHttp3Downloader(aa.getAvatar(An)))
+                .build();
+        ImageView useravatat = (ImageView) hView.findViewById(R.id.imageView);
+        picasso.load(url).into(useravatat);
+
+        Call<UserName> calluser = client.GetUserName(An,userid);
+        // HTTP callback
+        calluser.enqueue(new Callback <UserName>() {
+            @Override
+            public void onResponse(Call<UserName> call, Response<UserName> response) {
+                // Get data from response
+                UserName myUserName = response.body();
+                if(myUserName != null){
+                    nav_user.setText(myUserName.getData().getEmail());
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserName> call, Throwable t) {
+                Toast.makeText(DrawerActivity.this, "Error get username!", Toast.LENGTH_SHORT).show();
+                refreshLayout.setRefreshing(false);
+            }
+        });
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -126,7 +169,6 @@ public class DrawerActivity extends AppCompatActivity
 
     protected void fetchAndroidApps() {
         // View to populate android apps into
-        LinearLayout appsList = findViewById(R.id.android_apps_list);
 
         // HTTP API connection setup
         AndroidAppsClient client = RetrofitClientInstance.getRetrofitInstance().create(AndroidAppsClient.class);
@@ -136,11 +178,9 @@ public class DrawerActivity extends AppCompatActivity
         Call<AndroidApp> call = client.androidApps(An);
 
         // Notify user that fetch is in progress
-        appsList.removeAllViews();
         TextView androidAppView = new TextView(DrawerActivity.this);
         androidAppView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         androidAppView.setText("Fetching apps from server ...");
-        appsList.addView(androidAppView);
 
 
         // HTTP callback
@@ -157,7 +197,6 @@ public class DrawerActivity extends AppCompatActivity
                 Log.i("AndroidAppsFetched", "Fetched " + response.body());
 
                 // Remove all current items in the list
-                appsList.removeAllViews();
 
                 // Populate the list with data from the API
                 if (datum != null) {
@@ -169,7 +208,6 @@ public class DrawerActivity extends AppCompatActivity
                     TextView androidAppView = new TextView(DrawerActivity.this);
                     androidAppView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                     androidAppView.setText("There are no apps.");
-                    appsList.addView(androidAppView);
                 }
             }
                 refreshLayout.setRefreshing(false);
@@ -242,6 +280,14 @@ public class DrawerActivity extends AppCompatActivity
 
             startActivity(intent);
         } else if (id == R.id.nav_slideshow) {
+
+                    SharedPreferences myPrefs = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
+                    SharedPreferences.Editor editor = myPrefs.edit();
+                    editor.clear();
+                    editor.commit();
+                    Intent loginPageIntent = new Intent(getApplicationContext(), LoginActivity.class);
+
+                    startActivity(loginPageIntent);
 
         } else if (id == R.id.nav_manage) {
 

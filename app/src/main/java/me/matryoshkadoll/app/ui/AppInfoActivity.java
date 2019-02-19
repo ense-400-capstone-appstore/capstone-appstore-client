@@ -1,9 +1,12 @@
 package me.matryoshkadoll.app.ui;
 
+import android.app.AlertDialog;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -28,6 +31,8 @@ public class AppInfoActivity extends AppCompatActivity {
     private Button button;
     private long downloadID;
     private  String AppId;
+    private TextView rating;
+    AlertDialog.Builder builder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,13 +48,40 @@ public class AppInfoActivity extends AppCompatActivity {
         AppId=Integer.toString(tt);
 
         button=findViewById(R.id.button);
+        builder = new AlertDialog.Builder(this);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                beginDownload();
+            public void onClick(View v) {
 
+                builder.setTitle("Confirm Download")
+                .setMessage("Are you sure you want to Download this app ?")
+                        .setCancelable(false)
+                        .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                beginDownload();
+                                Toast.makeText(getApplicationContext(),"Download Begins",
+                                        Toast.LENGTH_SHORT).show();
+                                button.setText("Downloading");
+                                button.setEnabled(false);
+
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                                Toast.makeText(getApplicationContext(),"Download Stopped",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                //Creating dialog box
+                AlertDialog alert = builder.create();
+                alert.show();
             }
         });
+        registerReceiver(onComplete,
+                new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+        registerReceiver(onNotificationClick,
+                new IntentFilter(DownloadManager.ACTION_NOTIFICATION_CLICKED));
 
     }
 // under oncreate
@@ -76,5 +108,18 @@ public class AppInfoActivity extends AppCompatActivity {
         DownloadManager downloadManager= (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
         downloadID = downloadManager.enqueue(request);// enqueue puts the download request in the queue.
     }
+    BroadcastReceiver onComplete=new BroadcastReceiver() {
+        public void onReceive(Context ctxt, Intent intent) {
 
+            Toast.makeText(ctxt, "Download Complete!", Toast.LENGTH_LONG).show();
+        }
+    };
+
+    BroadcastReceiver onNotificationClick=new BroadcastReceiver() {
+        public void onReceive(Context ctxt, Intent intent) {
+            Toast.makeText(ctxt, "Downloadinggggggg!", Toast.LENGTH_LONG).show();
+        }
+    };
 }
+
+
