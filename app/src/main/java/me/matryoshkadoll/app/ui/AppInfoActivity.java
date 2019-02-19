@@ -61,6 +61,9 @@ public class AppInfoActivity extends AppCompatActivity {
                                 beginDownload();
                                 Toast.makeText(getApplicationContext(),"Download Begins",
                                         Toast.LENGTH_SHORT).show();
+                                button.setText("Downloading");
+                                button.setEnabled(false);
+
                             }
                         })
                         .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
