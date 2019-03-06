@@ -1,8 +1,10 @@
 package me.matryoshkadoll.app.ui;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,7 +40,11 @@ public class ProfileActivity extends AppCompatActivity {
 
 
     }
-
+    public void uploadimg(View v) {
+        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+        photoPickerIntent.setType("image/*");
+        startActivityForResult(photoPickerIntent, 1);
+    }
 
     private void TemplateMethod(){
         FetchToken();
