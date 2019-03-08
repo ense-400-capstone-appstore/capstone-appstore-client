@@ -231,7 +231,6 @@ private AndroidappInfo.Data data;
         }
     };
     @Override public void onDestroy() {
-        manager.remove(downloadId);
         this.unregisterReceiver(onComplete);
         this.unregisterReceiver(onNotificationClick);
 
