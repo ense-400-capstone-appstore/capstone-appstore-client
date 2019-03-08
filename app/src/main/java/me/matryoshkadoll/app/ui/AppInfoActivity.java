@@ -17,8 +17,12 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.squareup.picasso.OkHttp3Downloader;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 
@@ -26,6 +30,7 @@ import me.matryoshkadoll.app.R;
 import me.matryoshkadoll.app.api.model.AndroidappInfo;
 import me.matryoshkadoll.app.api.model.UserName;
 import me.matryoshkadoll.app.api.service.matryoshka.AndroidAppsClient;
+import me.matryoshkadoll.app.network.OkHTTPClientInstance;
 import me.matryoshkadoll.app.network.RetrofitClientInstance;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -45,6 +50,7 @@ private AndroidappInfo.Data data;
     private Intent it;
     private  int appid;
     private  String An;
+    private  ImageView appimg;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,15 +69,15 @@ private AndroidappInfo.Data data;
     }
     // under oncreate
     private void TemplateMethod(){
-FetchToken();
+        FetchToken();
         fetchappid();
         downloadbutton();
         getappinfo();
+        DisplayProfileImg();
 }
     private void FetchToken(){
         SharedPreferences prefs = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
         An = prefs.getString("AccessToken", "No name defined");
-        //userid = prefs.getInt("UserId",1);
 
     }
     private void fetchappid(){
@@ -167,7 +173,16 @@ FetchToken();
         });
     }
 
+    private void DisplayProfileImg(){
+        String url = "https://matryoshkadoll.me/api/v1/android_apps/" + appid+"/avatar";
 
+        OkHTTPClientInstance aa = new OkHTTPClientInstance();
+        Picasso picasso = new Picasso.Builder(this)
+                .downloader(new OkHttp3Downloader(aa.getAvatar(An)))
+                .build();
+        appimg= (ImageView) findViewById(R.id.imageView2);
+        picasso.load(url).into(appimg);
+    }
 
 
     BroadcastReceiver onComplete=new BroadcastReceiver() {
