@@ -23,6 +23,13 @@ import android.widget.Toast;
 import java.io.File;
 
 import me.matryoshkadoll.app.R;
+import me.matryoshkadoll.app.api.model.AndroidappInfo;
+import me.matryoshkadoll.app.api.model.UserName;
+import me.matryoshkadoll.app.api.service.matryoshka.AndroidAppsClient;
+import me.matryoshkadoll.app.network.RetrofitClientInstance;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static me.matryoshkadoll.app.login.LoginActivity.MY_PREFS_NAME;
 
@@ -33,7 +40,8 @@ public class AppInfoActivity extends AppCompatActivity {
     private  String AppId;
     private TextView rating;
     AlertDialog.Builder builder;
-
+    private Intent it;
+    private  int appid;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,52 +49,66 @@ public class AppInfoActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Intent it=getIntent();
-        tvs = (TextView) findViewById(R.id.textView2);
-        int tt = it.getIntExtra("app_id",999);
-        tvs.setText(Integer.toString(tt));
-        AppId=Integer.toString(tt);
 
-        button=findViewById(R.id.button);
-        builder = new AlertDialog.Builder(this);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        TemplateMethod();
 
-                builder.setTitle("Confirm Download")
-                .setMessage("Are you sure you want to Download this app ?")
-                        .setCancelable(false)
-                        .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                beginDownload();
-                                Toast.makeText(getApplicationContext(),"Download Begins",
-                                        Toast.LENGTH_SHORT).show();
-                                button.setText("Downloading");
-                                button.setEnabled(false);
-
-                            }
-                        })
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                                Toast.makeText(getApplicationContext(),"Download Stopped",
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                //Creating dialog box
-                AlertDialog alert = builder.create();
-                alert.show();
-            }
-        });
         registerReceiver(onComplete,
                 new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
         registerReceiver(onNotificationClick,
                 new IntentFilter(DownloadManager.ACTION_NOTIFICATION_CLICKED));
 
     }
-// under oncreate
+    // under oncreate
+    private void TemplateMethod(){
+
+        fetchappid();
+        downloadbutton();
+        getappinfo();
+}
+    private void fetchappid(){
+        it=getIntent();
+    appid = it.getIntExtra("app_id",999);
+    tvs = (TextView) findViewById(R.id.textView2);
+
+    tvs.setText(Integer.toString(appid));
+    AppId=Integer.toString(appid);
 
 
+}
+    private void downloadbutton(){
+    button=findViewById(R.id.button);
+    builder = new AlertDialog.Builder(this);
+    button.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+
+            builder.setTitle("Confirm Download")
+                    .setMessage("Are you sure you want to Download this app ?")
+                    .setCancelable(false)
+                    .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            beginDownload();
+                            Toast.makeText(getApplicationContext(),"Download Begins",
+                                    Toast.LENGTH_SHORT).show();
+                            button.setText("Downloading");
+                            button.setEnabled(false);
+
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                            Toast.makeText(getApplicationContext(),"Download Stopped",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
+            //Creating dialog box
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
+    });
+
+}
     private void beginDownload(){
         File file=new File(getExternalFilesDir(null),AppId+".apk");
         /*
@@ -108,6 +130,33 @@ public class AppInfoActivity extends AppCompatActivity {
         DownloadManager downloadManager= (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
         downloadID = downloadManager.enqueue(request);// enqueue puts the download request in the queue.
     }
+    private void getappinfo(){
+
+
+        AndroidAppsClient client = RetrofitClientInstance.getRetrofitInstance().create(AndroidAppsClient.class);
+
+        Call<AndroidappInfo> callapp = client.androidappinfo(An,userid);
+        // HTTP callback
+        callapp.enqueue(new Callback<AndroidappInfo>() {
+            @Override
+            public void onResponse(Call<AndroidappInfo> call, Response<AndroidappInfo> response) {
+                // Get data from response
+                AndroidappInfo myappinfo = response.body();
+                if(myappinfo != null){
+                    email.setText(myUserName.getData().getEmail());
+                    name.setText(myUserName.getData().getName());
+                }
+            }
+            @Override
+            public void onFailure(Call<AndroidappInfo> call, Throwable t) {
+
+            }
+        });
+    }
+
+
+
+
     BroadcastReceiver onComplete=new BroadcastReceiver() {
         public void onReceive(Context ctxt, Intent intent) {
 
