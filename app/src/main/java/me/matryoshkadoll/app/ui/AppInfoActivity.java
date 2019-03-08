@@ -38,10 +38,13 @@ public class AppInfoActivity extends AppCompatActivity {
     private Button button;
     private long downloadID;
     private  String AppId;
-    private TextView rating;
+    private TextView appname;
+    private TextView appdescription;
+private AndroidappInfo.Data data;
     AlertDialog.Builder builder;
     private Intent it;
     private  int appid;
+    private  String An;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,11 +63,17 @@ public class AppInfoActivity extends AppCompatActivity {
     }
     // under oncreate
     private void TemplateMethod(){
-
+FetchToken();
         fetchappid();
         downloadbutton();
         getappinfo();
 }
+    private void FetchToken(){
+        SharedPreferences prefs = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
+        An = prefs.getString("AccessToken", "No name defined");
+        //userid = prefs.getInt("UserId",1);
+
+    }
     private void fetchappid(){
         it=getIntent();
     appid = it.getIntExtra("app_id",999);
@@ -135,16 +144,20 @@ public class AppInfoActivity extends AppCompatActivity {
 
         AndroidAppsClient client = RetrofitClientInstance.getRetrofitInstance().create(AndroidAppsClient.class);
 
-        Call<AndroidappInfo> callapp = client.androidappinfo(An,userid);
+        Call<AndroidappInfo> callapp = client.androidappinfo(An,appid);
         // HTTP callback
         callapp.enqueue(new Callback<AndroidappInfo>() {
             @Override
             public void onResponse(Call<AndroidappInfo> call, Response<AndroidappInfo> response) {
                 // Get data from response
                 AndroidappInfo myappinfo = response.body();
+
                 if(myappinfo != null){
-                    email.setText(myUserName.getData().getEmail());
-                    name.setText(myUserName.getData().getName());
+                    data = myappinfo.getData();
+                    appname = (TextView)findViewById(R.id.textView3);
+                    appdescription = (TextView)findViewById(R.id.description);
+                    appname.setText(data.getName());
+                    appdescription.setText(data.getDescription());
                 }
             }
             @Override
