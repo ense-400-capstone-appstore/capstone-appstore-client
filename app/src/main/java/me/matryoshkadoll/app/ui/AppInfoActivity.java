@@ -11,8 +11,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -27,6 +26,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 
+import me.matryoshkadoll.app.BuildConfig;
 import me.matryoshkadoll.app.R;
 import me.matryoshkadoll.app.api.model.AndroidappInfo;
 import me.matryoshkadoll.app.api.model.UserName;
@@ -40,6 +40,7 @@ import retrofit2.Response;
 import static me.matryoshkadoll.app.login.LoginActivity.MY_PREFS_NAME;
 
 public class AppInfoActivity extends AppCompatActivity {
+    private Context context;
     private TextView tvs;
     private Button button;
     private long downloadID;
@@ -55,12 +56,16 @@ private AndroidappInfo.Data data;
     private Uri uri;
     private DownloadManager manager;
     private long downloadId;
+    File apkFile;
+    //private BroadcastReceiver onComplete;
+    //private BroadcastReceiver onNotificationClick;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_app_info);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        context = getApplicationContext();
 
 
         TemplateMethod();
@@ -129,36 +134,35 @@ private AndroidappInfo.Data data;
 
 }
     private void beginDownload(){
-        //File file=new File(getExternalFilesDir(null),data.getName()+".apk");
         /*
         Create a DownloadManager.Request with all the information necessary to start the download
          */
         String destination = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/";
         String fileName = data.getName()+".apk";
-        destination += fileName;
-        uri = Uri.parse("file://" + destination);
+        String destinationf = destination + fileName;
+        uri = Uri.parse("file://" + destinationf);
 
         //Delete update file if exists
-        File file = new File(destination);
+        File file = new File(destinationf);
         if (file.exists())
-        {
             //file.delete() - test this, I think sometimes it doesnt work
             file.delete();
-        }
+        apkFile = new File(destination, fileName);
+        //get url of app on server
         String url = "https://matryoshkadoll.me/api/v1/android_apps/"+AppId+"/file";
 
-        DownloadManager.Request request=new DownloadManager.Request(uri.parse(url))
-                .addRequestHeader("Authorization", An)
-                .setTitle(data.getName()+".apk")// Title of the Download Notification
-                .setDescription("Downloading")// Description of the Download Notification
-                .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)// Visibility of the download Notification
-                .setDestinationUri(uri)// Uri of the destination file
-                .setAllowedOverMetered(true)// Set if download is allowed on Mobile network
-                .setAllowedOverRoaming(true);// Set if download is allowed on roaming network
+            DownloadManager.Request request=new DownloadManager.Request(uri.parse(url))
+                    .addRequestHeader("Authorization", An)
+                    .setTitle(data.getName()+".apk")// Title of the Download Notification
+                    .setDescription("Downloading")// Description of the Download Notification
+                    .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)// Visibility of the download Notification
+                    .setDestinationUri(uri)// Uri of the destination file
+                    .setAllowedOverMetered(true)// Set if download is allowed on Mobile network
+                    .setAllowedOverRoaming(true);// Set if download is allowed on roaming network
 
-        // get download service and enqueue file
-        manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
-        downloadId = manager.enqueue(request);
+            // get download service and enqueue file
+            manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+            downloadId = manager.enqueue(request);
 
 
 
@@ -202,31 +206,44 @@ private AndroidappInfo.Data data;
         picasso.load(url).into(appimg);
     }
 
+    //set BroadcastReceiver to install app when .apk is downloaded
+    BroadcastReceiver onComplete = new BroadcastReceiver() {
+        public void onReceive(Context ctxt, Intent intent) {
+           /*  Intent promptInstall = new Intent(Intent.ACTION_VIEW)
+                   .setDataAndType(uri,
+                            "application/vnd.android.package-archive");
+            startActivity(promptInstall);*/
 
+            Intent install = new Intent(Intent.ACTION_VIEW);
+            install.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            Uri uri = FileProvider.getUriForFile(context, context.getPackageName() + ".provider", apkFile);
+            install.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            install.setDataAndType(uri,
+                    "application/vnd.android.package-archive");
+            ctxt.startActivity(install);
+            unregisterReceiver(this);
+            //finish();
+        }
+    };
+    BroadcastReceiver onNotificationClick=new BroadcastReceiver() {
+        public void onReceive(Context ctxt, Intent intent) {
+            Toast.makeText(ctxt, "Downloadinggggggg!", Toast.LENGTH_LONG).show();
+        }
+    };
+    @Override public void onDestroy() {
+        manager.remove(downloadId);
+        this.unregisterReceiver(onComplete);
+        this.unregisterReceiver(onNotificationClick);
+
+        super.onDestroy();
+    }
 /*    BroadcastReceiver onComplete=new BroadcastReceiver() {
         public void onReceive(Context ctxt, Intent intent) {
 
             Toast.makeText(ctxt, "Download Complete!", Toast.LENGTH_LONG).show();
         }
     };*/
-//set BroadcastReceiver to install app when .apk is downloaded
-BroadcastReceiver onComplete = new BroadcastReceiver() {
-    public void onReceive(Context ctxt, Intent intent) {
-        Intent install = new Intent(Intent.ACTION_VIEW);
-        install.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        install.setDataAndType(uri,
-                manager.getMimeTypeForDownloadedFile(downloadId));
-        startActivity(install);
 
-        unregisterReceiver(this);
-        finish();
-    }
-};
-    BroadcastReceiver onNotificationClick=new BroadcastReceiver() {
-        public void onReceive(Context ctxt, Intent intent) {
-            Toast.makeText(ctxt, "Downloadinggggggg!", Toast.LENGTH_LONG).show();
-        }
-    };
 }
 
 
