@@ -228,7 +228,7 @@ private AndroidappInfo.Data data;
         }
     };
     @Override public void onDestroy() {
-        this.unregisterReceiver(onComplete);
+       // this.unregisterReceiver(onComplete);
         this.unregisterReceiver(onNotificationClick);
 
         super.onDestroy();

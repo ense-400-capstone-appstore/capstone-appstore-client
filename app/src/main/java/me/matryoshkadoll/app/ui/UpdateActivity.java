@@ -1,7 +1,9 @@
 package me.matryoshkadoll.app.ui;
 
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -42,29 +44,7 @@ public class UpdateActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
 
-
-
-
-        //fetch installed apps
-        final PackageManager packageManager = getPackageManager();
-        List<ApplicationInfo> installedApplications =
-                packageManager.getInstalledApplications(PackageManager.GET_META_DATA);
-
-
-        for (ApplicationInfo appInfo : installedApplications)
-        {
-
-            InstalledApp app = new InstalledApp();
-            app.setPackageName(appInfo.packageName);
-            app.setLabel(appInfo.loadLabel(packageManager).toString());
-            app.setIcon(appInfo.loadIcon(getPackageManager()));
-            app.setName(appInfo.name);
-
-            Log.i("OUTPUT", "Package name : " + app.getPackageName());
-            Log.i("OUTPUT", "Name: " + app.getLabel());
-            appList.add(app);
-
-        }
+appList = getInstalledApps();
 
 
         // specify an adapter (see also next example)
@@ -80,4 +60,28 @@ public class UpdateActivity extends AppCompatActivity {
 
     }
 
+    private List<InstalledApp> getInstalledApps() {
+        List<InstalledApp> res = new ArrayList<InstalledApp>();
+        List<PackageInfo> packs = getPackageManager().getInstalledPackages(0);
+        for (int i = 0; i < packs.size(); i++) {
+            PackageInfo p = packs.get(i);
+            if ((isSystemPackage(p) == false)) {
+                String appName = p.applicationInfo.loadLabel(getPackageManager()).toString();
+                Drawable icon = p.applicationInfo.loadIcon(getPackageManager());
+                String pkname = p.applicationInfo.packageName;
+                String label = p.applicationInfo.loadLabel(getPackageManager()).toString();
+                InstalledApp ins = new InstalledApp();
+                ins.setIcon(icon);
+                ins.setName(appName);
+                ins.setPackageName(pkname);
+                ins.setLabel(label);
+                res.add(ins);
+            }
+        }
+        return res;
+    }
+
+    private boolean isSystemPackage(PackageInfo pkgInfo) {
+        return ((pkgInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) ? true : false;
+    }
 }
