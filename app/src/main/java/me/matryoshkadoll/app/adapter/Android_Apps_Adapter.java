@@ -20,7 +20,6 @@ import java.util.List;
 import me.matryoshkadoll.app.R;
 
 import me.matryoshkadoll.app.api.model.AndroidApp;
-
 import me.matryoshkadoll.app.network.OkHTTPClientInstance;
 import me.matryoshkadoll.app.ui.AppInfoActivity;
 
