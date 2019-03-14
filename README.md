@@ -1,7 +1,7 @@
 ![Matryoshka Logo](./img/Logo_x256.png)
-
+### Matryoshka-app [![CircleCI](https://circleci.com/gh/matryoshkadoll/matryoshka-app.svg?style=svg)](https://circleci.com/gh/matryoshkadoll/matryoshka-app)
 > Android frontend powering the Matryoshka App
-[![CircleCI](https://circleci.com/gh/matryoshkadoll/matryoshka-app.svg?style=svg)](https://circleci.com/gh/matryoshkadoll/matryoshka-app)
+
 This client application hosts the android app for the Matryoshka Project.
 ```
 ## Installing / Getting started
@@ -20,7 +20,7 @@ cd matryoshka-doll
 
 ### Built With
 
--   
+  Android sdk API 28
 
 ### Prerequisites
 
