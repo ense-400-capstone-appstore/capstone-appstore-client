@@ -57,8 +57,7 @@ private AndroidappInfo.Data data;
     private DownloadManager manager;
     private long downloadId;
     File apkFile;
-    //private BroadcastReceiver onComplete;
-    //private BroadcastReceiver onNotificationClick;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -209,10 +208,8 @@ private AndroidappInfo.Data data;
     //set BroadcastReceiver to install app when .apk is downloaded
     BroadcastReceiver onComplete = new BroadcastReceiver() {
         public void onReceive(Context ctxt, Intent intent) {
-           /*  Intent promptInstall = new Intent(Intent.ACTION_VIEW)
-                   .setDataAndType(uri,
-                            "application/vnd.android.package-archive");
-            startActivity(promptInstall);*/
+            Toast.makeText(ctxt, "Download Complete!", Toast.LENGTH_LONG).show();
+
 
             Intent install = new Intent(Intent.ACTION_VIEW);
             install.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -231,18 +228,12 @@ private AndroidappInfo.Data data;
         }
     };
     @Override public void onDestroy() {
-        manager.remove(downloadId);
-        this.unregisterReceiver(onComplete);
+       // this.unregisterReceiver(onComplete);
         this.unregisterReceiver(onNotificationClick);
 
         super.onDestroy();
     }
-/*    BroadcastReceiver onComplete=new BroadcastReceiver() {
-        public void onReceive(Context ctxt, Intent intent) {
 
-            Toast.makeText(ctxt, "Download Complete!", Toast.LENGTH_LONG).show();
-        }
-    };*/
 
 }
 

@@ -56,6 +56,7 @@ public class AndroidappInfo {
 
     }
 
+
     public class Data {
 
         @SerializedName("id")
@@ -73,9 +74,12 @@ public class AndroidappInfo {
         @SerializedName("price")
         @Expose
         private Integer price;
-        @SerializedName("avatar")
+        @SerializedName("package_name")
         @Expose
-        private String avatar;
+        private Object packageName;
+        @SerializedName("creator_id")
+        @Expose
+        private Integer creatorId;
         @SerializedName("created_at")
         @Expose
         private CreatedAt createdAt;
@@ -123,12 +127,20 @@ public class AndroidappInfo {
             this.price = price;
         }
 
-        public String getAvatar() {
-            return avatar;
+        public Object getPackageName() {
+            return packageName;
         }
 
-        public void setAvatar(String avatar) {
-            this.avatar = avatar;
+        public void setPackageName(Object packageName) {
+            this.packageName = packageName;
+        }
+
+        public Integer getCreatorId() {
+            return creatorId;
+        }
+
+        public void setCreatorId(Integer creatorId) {
+            this.creatorId = creatorId;
         }
 
         public CreatedAt getCreatedAt() {
@@ -187,4 +199,3 @@ public class AndroidappInfo {
 
     }
 }
-
