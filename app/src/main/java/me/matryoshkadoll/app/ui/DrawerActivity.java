@@ -57,7 +57,6 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            Intent in;
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     tvs.setText(R.string.title_home);
@@ -135,7 +134,13 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
                 .build();
         ImageView useravatat = (ImageView) hView.findViewById(R.id.imageView);
         picasso.load(url).into(useravatat);
+        useravatat.setOnClickListener(new View.OnClickListener(){
 
+            public void onClick(View view) {
+                Intent Intent = new Intent(getApplicationContext(), ProfileActivity.class);
+
+                startActivity(Intent);
+            }});
         Call<UserName> calluser = client.GetUserName(An,userid);
         // HTTP callback
         calluser.enqueue(new Callback <UserName>() {
@@ -290,9 +295,7 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
                     startActivity(loginPageIntent);
 
         } else if (id == R.id.nav_manage) {
-            Intent Intent = new Intent(getApplicationContext(), ProfileActivity.class);
 
-            startActivity(Intent);
 
         } else if (id == R.id.nav_share) {
 

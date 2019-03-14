@@ -3,6 +3,8 @@ package me.matryoshkadoll.app.api.service.matryoshka;
 
 
 import me.matryoshkadoll.app.api.model.AndroidApp;
+import me.matryoshkadoll.app.api.model.AndroidappInfo;
+import me.matryoshkadoll.app.api.model.Categories;
 import me.matryoshkadoll.app.api.model.User;
 
 import me.matryoshkadoll.app.api.model.UserInfo;
@@ -19,9 +21,17 @@ public interface AndroidAppsClient {
     @GET("users/{id}")
     Call<UserName> GetUserName(@Header("Authorization")String token, @Path("id") int id );
 
+    @GET ("categories")
+    Call<Categories>getCategories(@Header("Authorization")String token);
+
+    @GET ("categories/{id}/android_apps")
+    Call<AndroidApp>getAppsbyCategories(@Header("Authorization")String token, @Path("id") int id);
 
     @GET("android_apps")
     Call<AndroidApp> androidApps(@Header("Authorization") String authorization);
+
+    @GET("android_apps/{id}")
+    Call<AndroidappInfo> androidappinfo(@Header("Authorization") String authorization, @Path("id") int id);
 
     @Headers({"Accept:application/json",
             "Content-Type:application/json"})

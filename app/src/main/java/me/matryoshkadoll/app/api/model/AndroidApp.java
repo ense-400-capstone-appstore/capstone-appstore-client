@@ -43,7 +43,6 @@ public class AndroidApp {
 
 
 
-
 public class CreatedAt {
 
     @SerializedName("date")
@@ -82,7 +81,6 @@ public class CreatedAt {
 
 }
 
-
 public class Datum {
 
     @SerializedName("id")
@@ -99,7 +97,13 @@ public class Datum {
     private String description;
     @SerializedName("price")
     @Expose
-    private Integer price;
+    private Double price;
+    @SerializedName("package_name")
+    @Expose
+    private Object packageName;
+    @SerializedName("creator_id")
+    @Expose
+    private Integer creatorId;
     @SerializedName("created_at")
     @Expose
     private CreatedAt createdAt;
@@ -139,12 +143,28 @@ public class Datum {
         this.description = description;
     }
 
-    public Integer getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(Integer price) {
+    public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public Object getPackageName() {
+        return packageName;
+    }
+
+    public void setPackageName(Object packageName) {
+        this.packageName = packageName;
+    }
+
+    public Integer getCreatorId() {
+        return creatorId;
+    }
+
+    public void setCreatorId(Integer creatorId) {
+        this.creatorId = creatorId;
     }
 
     public CreatedAt getCreatedAt() {
@@ -164,7 +184,6 @@ public class Datum {
     }
 
 }
-
 
 public class Links {
 
