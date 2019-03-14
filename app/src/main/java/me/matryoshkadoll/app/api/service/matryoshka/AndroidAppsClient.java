@@ -24,6 +24,9 @@ public interface AndroidAppsClient {
     @GET ("categories")
     Call<Categories>getCategories(@Header("Authorization")String token);
 
+    @GET ("categories/{id}/android_apps")
+    Call<AndroidApp>getAppsbyCategories(@Header("Authorization")String token, @Path("id") int id);
+
     @GET("android_apps")
     Call<AndroidApp> androidApps(@Header("Authorization") String authorization);
 

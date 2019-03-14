@@ -5,13 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import java.util.List;
-
 import me.matryoshkadoll.app.R;
 import me.matryoshkadoll.app.adapter.Categories_Adapter;
 import me.matryoshkadoll.app.api.model.Categories;
