@@ -217,7 +217,7 @@ private AndroidappInfo.Data data;
             install.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             install.setDataAndType(uri,
                     "application/vnd.android.package-archive");
-            ctxt.startActivity(install);
+            startActivity(install);
             //finish();
         }
     };
