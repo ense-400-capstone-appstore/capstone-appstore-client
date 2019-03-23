@@ -1,47 +1,18 @@
 package me.matryoshkadoll.app.api.model;
 
-import android.graphics.drawable.Drawable;
+import android.app.Application;
+import android.content.pm.PackageInfo;
 
-public class InstalledApp {
-    private String label;
-    private String packageName;
-    private Drawable icon;
-    private String name;
+public class InstalledApp extends Application {
+    PackageInfo packageInfo;
 
-    public String getName() {
-        return name;
+    public PackageInfo getPackageInfo() {
+        return packageInfo;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setPackageInfo(PackageInfo packageInfo) {
+        this.packageInfo = packageInfo;
     }
-
-
-    public Drawable getIcon() {
-        return icon;
-    }
-
-    public void setPackageName(String packageName) {
-        this.packageName = packageName;
-    }
-
-    public void setIcon(Drawable icon) {
-        this.icon = icon;
-    }
-
-    public void setLabel(String label) {
-        this.label = label;
-    }
-
-
-    public String getPackageName() {
-        return packageName;
-    }
-
-    public String getLabel() {
-        return label;
-    }
-
 
 
 

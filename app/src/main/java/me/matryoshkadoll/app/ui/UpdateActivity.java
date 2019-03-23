@@ -25,7 +25,6 @@ public class UpdateActivity extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     public List<InstalledApp> appList  = new ArrayList<>();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,13 +42,10 @@ public class UpdateActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-
-appList = getInstalledApps();
-
+        appList = getInstalledApps();
 
         // specify an adapter (see also next example)
-
-        mAdapter = new Installed_Apps_Adapter(appList);
+        mAdapter = new Installed_Apps_Adapter(appList, getApplicationContext() );
         mRecyclerView.setAdapter(mAdapter);
 
 
@@ -66,15 +62,8 @@ appList = getInstalledApps();
         for (int i = 0; i < packs.size(); i++) {
             PackageInfo p = packs.get(i);
             if ((isSystemPackage(p) == false)) {
-                String appName = p.applicationInfo.loadLabel(getPackageManager()).toString();
-                Drawable icon = p.applicationInfo.loadIcon(getPackageManager());
-                String pkname = p.applicationInfo.packageName;
-                String label = p.applicationInfo.loadLabel(getPackageManager()).toString();
                 InstalledApp ins = new InstalledApp();
-                ins.setIcon(icon);
-                ins.setName(appName);
-                ins.setPackageName(pkname);
-                ins.setLabel(label);
+                ins.setPackageInfo(p);
                 res.add(ins);
             }
         }
