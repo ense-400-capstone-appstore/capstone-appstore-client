@@ -2,6 +2,7 @@ package me.matryoshkadoll.app.adapter;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,6 +15,8 @@ import java.util.List;
 
 import me.matryoshkadoll.app.R;
 import me.matryoshkadoll.app.api.model.InstalledApp;
+import me.matryoshkadoll.app.ui.InstalledActivity;
+
 import android.content.pm.PackageManager;
 public class Installed_Apps_Adapter extends RecyclerView.Adapter<Installed_Apps_Adapter.MyViewHolder> {
 
@@ -27,10 +30,22 @@ public class Installed_Apps_Adapter extends RecyclerView.Adapter<Installed_Apps_
         // each data item is just a string in this case
         public TextView mTextView;
         public ImageView mDrawable;
+        private String package_name;
         public MyViewHolder(View v) {
             super(v);
             mTextView  = (TextView) itemView.findViewById(R.id.list_app_name);
-            mDrawable  = (ImageView) itemView.findViewById(R.id.app_icon);;
+            mDrawable  = (ImageView) itemView.findViewById(R.id.app_icon);
+            v.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View view) {
+
+                    Intent it= new Intent(v.getContext(), InstalledActivity.class);
+                    it.putExtra("package_name",package_name);
+                    v.getContext().startActivity(it);
+
+
+                }
+            });
 
         }
     }
@@ -73,7 +88,7 @@ public class Installed_Apps_Adapter extends RecyclerView.Adapter<Installed_Apps_
         }
         catch (Exception e){}
        holder.mTextView.setText(ip.getPackageInfo().packageName);
-
+        holder.package_name = ip.getPackageInfo().packageName;
     }
 
     // Return the size of your dataset (invoked by the layout manager)
