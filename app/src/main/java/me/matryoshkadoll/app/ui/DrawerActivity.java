@@ -63,7 +63,7 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
 
                     return true;
                 case R.id.navigation_dashboard:
-                    tvs.setText(R.string.title_dashboard);
+                    tvs.setText("Categories");
                     startActivity(new Intent(DrawerActivity.this, CategoriesActivity.class));
                     return true;
                 case R.id.navigation_update:

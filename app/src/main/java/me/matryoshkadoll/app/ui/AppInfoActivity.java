@@ -217,8 +217,7 @@ private AndroidappInfo.Data data;
             install.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             install.setDataAndType(uri,
                     "application/vnd.android.package-archive");
-            ctxt.startActivity(install);
-            unregisterReceiver(this);
+            startActivity(install);
             //finish();
         }
     };
@@ -228,7 +227,7 @@ private AndroidappInfo.Data data;
         }
     };
     @Override public void onDestroy() {
-       // this.unregisterReceiver(onComplete);
+        this.unregisterReceiver(onComplete);
         this.unregisterReceiver(onNotificationClick);
 
         super.onDestroy();
