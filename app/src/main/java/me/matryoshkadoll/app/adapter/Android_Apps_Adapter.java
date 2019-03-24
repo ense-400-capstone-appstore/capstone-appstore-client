@@ -78,7 +78,7 @@ private String token;
                                                                                                     int viewType) {
             // create a new view
             View v =  LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.activity_installed__apps__adapter, parent, false);
+                    .inflate(R.layout.activity_applist_adapter, parent, false);
 
             me.matryoshkadoll.app.adapter.Android_Apps_Adapter.MyViewHolder vh = new me.matryoshkadoll.app.adapter.Android_Apps_Adapter.MyViewHolder(v);
             return vh;

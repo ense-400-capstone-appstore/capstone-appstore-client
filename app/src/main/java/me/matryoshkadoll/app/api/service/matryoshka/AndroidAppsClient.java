@@ -33,6 +33,9 @@ public interface AndroidAppsClient {
     @GET("android_apps/{id}")
     Call<AndroidappInfo> androidappinfo(@Header("Authorization") String authorization, @Path("id") int id);
 
+    @GET("android_apps/package_name/{package_name}")
+    Call<AndroidappInfo> checkappexist(@Header("Authorization") String authorization, @Path("package_name") String pkname);
+
     @Headers({"Accept:application/json",
             "Content-Type:application/json"})
     @POST("login")

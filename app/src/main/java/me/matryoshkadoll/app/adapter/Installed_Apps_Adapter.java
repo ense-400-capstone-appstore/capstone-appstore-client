@@ -3,7 +3,6 @@ package me.matryoshkadoll.app.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,10 +13,17 @@ import android.widget.TextView;
 import java.util.List;
 
 import me.matryoshkadoll.app.R;
+import me.matryoshkadoll.app.api.model.AndroidappInfo;
 import me.matryoshkadoll.app.api.model.InstalledApp;
+import me.matryoshkadoll.app.api.service.matryoshka.AndroidAppsClient;
+import me.matryoshkadoll.app.network.RetrofitClientInstance;
 import me.matryoshkadoll.app.ui.InstalledActivity;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import android.content.pm.PackageManager;
+
 public class Installed_Apps_Adapter extends RecyclerView.Adapter<Installed_Apps_Adapter.MyViewHolder> {
 
     private List<InstalledApp> appList;
@@ -31,10 +37,12 @@ public class Installed_Apps_Adapter extends RecyclerView.Adapter<Installed_Apps_
         public TextView mTextView;
         public ImageView mDrawable;
         private String package_name;
+        public  TextView mTextview2;
         public MyViewHolder(View v) {
             super(v);
             mTextView  = (TextView) itemView.findViewById(R.id.list_app_name);
             mDrawable  = (ImageView) itemView.findViewById(R.id.app_icon);
+            mTextview2 = (TextView) itemView.findViewById(R.id.textView9);
             v.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View view) {
@@ -68,7 +76,7 @@ public class Installed_Apps_Adapter extends RecyclerView.Adapter<Installed_Apps_
                                                                   int viewType) {
         // create a new view
         View v =  LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.activity_installed__apps__adapter, parent, false);
+                .inflate(R.layout.activity_applist_adapter, parent, false);
 
         MyViewHolder vh = new MyViewHolder(v);
         return vh;
@@ -87,6 +95,14 @@ public class Installed_Apps_Adapter extends RecyclerView.Adapter<Installed_Apps_
 
         }
         catch (Exception e){}
+
+    if(ip.isExistonserver()==true){
+
+    }
+    else if(ip.isExistonserver()==false){
+
+        holder.mTextview2.setText("Warning!! This app is not from Matryshka app store");
+    }
        holder.mTextView.setText(ip.getPackageInfo().packageName);
         holder.package_name = ip.getPackageInfo().packageName;
     }
@@ -98,4 +114,5 @@ public class Installed_Apps_Adapter extends RecyclerView.Adapter<Installed_Apps_
         return appList.size();
 
     }
+
 }
