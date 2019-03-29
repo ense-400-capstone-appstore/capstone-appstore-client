@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.widget.Toast;
 import me.matryoshkadoll.app.R;
 import me.matryoshkadoll.app.adapter.Categories_Adapter;
@@ -63,6 +64,8 @@ private Categories categories;
             public void onResponse(Call<Categories> call, Response<Categories> response) {
                 // Get data from response
                  categories = response.body();
+                Log.i("Status", "Status code " + response.code());
+
                 mAdapter = new Categories_Adapter(categories);
                 mRecyclerView.setAdapter(mAdapter);
             }
