@@ -1,5 +1,5 @@
 ![Matryoshka Logo](./img/Logo_x256.png)
-### Matryoshka-app [![CircleCI](https://circleci.com/gh/matryoshkadoll/matryoshka-app.svg?style=svg)](https://circleci.com/gh/matryoshkadoll/matryoshka-app)
+### Matryoshka-app [![CircleCI](https://circleci.com/gh/matryoshkadoll/matryoshka-app.svg?style=svg)](https://circleci.com/gh/matryoshkadoll/matryoshka-app)<a href="https://996.icu"><img src="https://img.shields.io/badge/link-996.icu-red.svg"></a>
 > Android frontend powering the Matryoshka App
 
 This client application hosts the android app for the Matryoshka Project.
