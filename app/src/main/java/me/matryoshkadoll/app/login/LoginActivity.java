@@ -182,12 +182,45 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_READ_CONTACTS) {
+       /* if (requestCode == REQUEST_READ_CONTACTS) {
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 populateAutoComplete();
             }
+        }*/
+
+
+        switch (requestCode) {
+            case REQUEST_READ_CONTACTS: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                    populateAutoComplete();
+
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+            case 2: {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    //resume tasks needing this permission
+                } else {
+                }
+            }
+
+            case 3: {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    //resume tasks needing this permission
+                } else {
+                }
+            }        }
+            // other 'case' lines to check for other
+            // permissions this app might request.
+
         }
-    }
 
 
     /**
