@@ -101,7 +101,7 @@ public class Installed_Apps_Adapter extends RecyclerView.Adapter<Installed_Apps_
     }
     else if(ip.isExistonserver()==false){
 
-        holder.mTextview2.setText("Warning!! This app is not from Matryshka app store");
+        //holder.mTextview2.setText("Warning!! This app is not from Matryshka app store");
     }
        holder.mTextView.setText(ip.getPackageInfo().packageName);
         holder.package_name = ip.getPackageInfo().packageName;
