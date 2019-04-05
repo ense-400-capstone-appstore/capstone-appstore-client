@@ -16,7 +16,9 @@ public class AndroidappInfo {
     public void setData(Data data) {
         this.data = data;
     }
-
+public AndroidappInfo(){
+        this.data = new Data();
+}
 
     public class CreatedAt {
 
