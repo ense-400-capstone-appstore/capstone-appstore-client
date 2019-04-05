@@ -65,9 +65,9 @@ private Categories categories;
                 // Get data from response
                  categories = response.body();
                 Log.i("Status", "Status code " + response.code());
-
+                if(categories==null){}else{
                 mAdapter = new Categories_Adapter(categories);
-                mRecyclerView.setAdapter(mAdapter);
+                mRecyclerView.setAdapter(mAdapter);}
             }
 
             @Override

@@ -207,6 +207,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             case 2: {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     //resume tasks needing this permission
+                    populateAutoComplete();
+
                 } else {
                 }
             }
@@ -214,6 +216,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             case 3: {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     //resume tasks needing this permission
+                    populateAutoComplete();
+
                 } else {
                 }
             }        }
